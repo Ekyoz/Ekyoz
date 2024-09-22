@@ -25,4 +25,4 @@ J'apprécie le travail en équipe et j'aime échanger des idées et des techniqu
 - La creation d'application avec SDL et OpenGL
 - Optimisation des performances en C++
 
-![Statistiques de contribution](https://github-readme-stats.vercel.app/api?username=Ekyoz&show_icons=true&theme=dark)
+![Langages utilisés](https://github-readme-stats.vercel.app/api/top-langs/?username=Ekyoz&layout=compact&theme=dark&hide=html)
