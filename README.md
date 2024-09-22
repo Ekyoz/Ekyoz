@@ -1,23 +1,26 @@
 # Salut, je suis Alexandre 👋
 
-Bienvenue sur mon profil GitHub ! Je suis passionné par le développement en C++ et j'aime travailler sur des projets qui utilisent OpenGL et SDL2. 
+Bienvenue sur mon profil GitHub ! Je suis étudiant à l'école 42 Lyon, passionné par le développement en C++. J'aime travailler sur des projets en groupe, mais je trouve également de la satisfaction dans mes projets solo.
 
 ## 🔧 Mes compétences
-- C++
-- OpenGL
+- C/C++
 - SDL2
 - CMake
 - Docker
 - Git
+- Makefile
+- Python
 
 ## 🚀 Projets récents
-- [Nova_Engine](lien_vers_ton_projet) - Une bibliothèque partagée pour le développement de jeux.
-- [MaLibrairie](lien_vers_ton_autre_projet) - Une librairie C++ avec des fonctionnalités avancées.
+- [Nova_Engine](https://github.com/Ekyoz/Nova-Engine) - Creation d'un moteur de jeux 2D.
+- [Boxyz] - Projet de creation de mon propre systeme de domotique
+
+## 👥 Collaboration
+J'apprécie le travail en équipe et j'aime échanger des idées et des techniques avec d'autres développeurs. N'hésitez pas à me contacter si vous souhaitez collaborer sur un projet !
 
 ## 📫 Contact
-- **Email :** ton.email@example.com
-- **LinkedIn :** [ton-profil-linkedin](lien_vers_ton_linkedin)
+- **Email :** alexandre.tresallet@gmail.com
 
 ## 🌱 J'apprends actuellement
-- Développement cross-platform
+- La creation d'application avec SDL et OpenGL
 - Optimisation des performances en C++
