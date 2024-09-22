@@ -46,4 +46,4 @@ J'apprécie le travail en équipe et j'aime échanger des idées et des techniqu
 - La creation d'application avec SDL et OpenGL
 - Optimisation des performances en C++
 
-![Historique des contributions](https://github-readme-stats.vercel.app/api/wakatime?username=ton-nom-utilisateur)
+![Historique des contributions](https://github-readme-stats.vercel.app/api/wakatime?username=Ekyoz)
