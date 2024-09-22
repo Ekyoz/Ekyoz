@@ -2,6 +2,17 @@
 
 Bienvenue sur mon profil GitHub ! Je suis étudiant à l'école 42 Lyon, passionné par le développement en C++. J'aime travailler sur des projets en groupe, mais je trouve également de la satisfaction dans mes projets solo.
 
+## 📊 Statistiques de mon profil
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=Ekyoz&show_icons=true&theme=dark" />
+</div>
+
+## 📊 Langages utilisés
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ekyoz&layout=compact&theme=dark&hide=html" />
+</div>
+
+
 ## 🔧 Mes compétences
 - C/C++
 - SDL2
@@ -24,5 +35,3 @@ J'apprécie le travail en équipe et j'aime échanger des idées et des techniqu
 ## 🌱 J'apprends actuellement
 - La creation d'application avec SDL et OpenGL
 - Optimisation des performances en C++
-
-![Langages utilisés](https://github-readme-stats.vercel.app/api/top-langs/?username=Ekyoz&layout=compact&theme=dark&hide=html)
