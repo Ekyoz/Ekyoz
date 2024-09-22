@@ -12,8 +12,8 @@ Bienvenue sur mon profil GitHub ! Je suis étudiant à l'école 42 Lyon, passion
 - Python
 
 ## 🚀 Projets récents
-- [Nova_Engine](https://github.com/Ekyoz/Nova-Engine) - Creation d'un moteur de jeux 2D.
-- [Boxyz] - Projet de creation de mon propre systeme de domotique
+- [Nova_Engine](https://github.com/Ekyoz/Nova-Engine) - Creation d'un moteur de jeux 2D. ![Langages utilisés](https://img.shields.io/github/languages/top/Ekyoz/Nova-Engine)
+- [Boxyz](https://github.com/Ekyoz/Boxyz_App) - Projet de creation de mon propre systeme de domotique ![Langages utilisés](https://img.shields.io/github/languages/top/Ekyoz/Boxyz_App)
 
 ## 👥 Collaboration
 J'apprécie le travail en équipe et j'aime échanger des idées et des techniques avec d'autres développeurs. N'hésitez pas à me contacter si vous souhaitez collaborer sur un projet !
@@ -24,5 +24,3 @@ J'apprécie le travail en équipe et j'aime échanger des idées et des techniqu
 ## 🌱 J'apprends actuellement
 - La creation d'application avec SDL et OpenGL
 - Optimisation des performances en C++
-
-![Langages utilisés](https://img.shields.io/github/languages/top/Ekyoz/Nova-Engine)
