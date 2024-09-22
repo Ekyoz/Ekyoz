@@ -45,5 +45,3 @@ J'apprécie le travail en équipe et j'aime échanger des idées et des techniqu
 ## 🌱 J'apprends actuellement
 - La creation d'application avec SDL et OpenGL
 - Optimisation des performances en C++
-
-[![Vote pour moi](https://img.shields.io/badge/vote-oui-green)](lien)
