@@ -24,3 +24,5 @@ J'apprécie le travail en équipe et j'aime échanger des idées et des techniqu
 ## 🌱 J'apprends actuellement
 - La creation d'application avec SDL et OpenGL
 - Optimisation des performances en C++
+
+![Langages utilisés](https://img.shields.io/github/languages/top/Ekyoz/Nova-Engine)
