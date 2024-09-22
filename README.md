@@ -1,16 +1,23 @@
-## Hi there 👋
+# Salut, je suis Alexandre 👋
 
-<!--
-**Ekyoz/Ekyoz** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Bienvenue sur mon profil GitHub ! Je suis passionné par le développement en C++ et j'aime travailler sur des projets qui utilisent OpenGL et SDL2. 
 
-Here are some ideas to get you started:
+## 🔧 Mes compétences
+- C++
+- OpenGL
+- SDL2
+- CMake
+- Docker
+- Git
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## 🚀 Projets récents
+- [Nova_Engine](lien_vers_ton_projet) - Une bibliothèque partagée pour le développement de jeux.
+- [MaLibrairie](lien_vers_ton_autre_projet) - Une librairie C++ avec des fonctionnalités avancées.
+
+## 📫 Contact
+- **Email :** ton.email@example.com
+- **LinkedIn :** [ton-profil-linkedin](lien_vers_ton_linkedin)
+
+## 🌱 J'apprends actuellement
+- Développement cross-platform
+- Optimisation des performances en C++
