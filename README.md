@@ -2,16 +2,12 @@
 
 🎓 Étudiant à **42 Lyon**  
 💡 Passionné par le **développement logiciel**, l’**intelligence artificielle** et les **systèmes embarqués**.  
-🔧 Développeur axé sur la **performance**, la **qualité du code** et l’**apprentissage continu**.  
-
----
+🔧 Développeur axé sur la **qualité du code** et l’**apprentissage continu**.  
 
 ## 🧠 Domaines d’intérêt
 - 🤖 **Intelligence Artificielle**
 - ⚙️ **Systèmes embarqués**
 - 🧩 **Architecture logicielle & optimisation**
-
----
 
 ## 💻 Langages
 
@@ -72,8 +68,6 @@
 
 </div>
 
----
-
 ## 🧰 Technologies et outils
 
 <div align="center">
@@ -115,20 +109,15 @@
 
 </div>
 
-
----
-
 ## 📊 Statistiques GitHub
 <div align="center">
   <a href="https://github.com/Ekyoz">
-    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=Ekyoz&show_icons=true&theme=dark&hide_border=true&hide_rank=true&include_all_commits=true&bg_color=000000&title_color=00c8ff&icon_color=00c8ff" />
+    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=Ekyoz&custom_title=Statistiques%20de%20Ekyoz&show_icons=true&theme=default&hide_border=true&rank_icon=github&include_all_commits=true&title_color=000000&icon_color=000000&local=fr" />
   </a>
   <a href="https://github.com/Ekyoz">
-    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ekyoz&layout=donut&hide=html,makefile,objective-c,roff&size_weight=0.5&count_weight=0.5&custom_title=Langages%20les%20plus%20utilis%C3%A9s%20🚀&theme=dark&bg_color=000000&title_color=00c8ff&icon_color=00c8ff" />
+    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ekyoz&layout=donut&hide=html,makefile,objective-c,roff&size_weight=0.5&count_weight=0.5&custom_title=Langages%20les%20plus%20utilis%C3%A9s%20🚀&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
   </a>
 </div>
-
----
 
 ## 🚀 Projets préférés
 <div align="center">
@@ -140,7 +129,7 @@
 ### 🕹️ [Transcendence](https://github.com/The-mallocers/Transcendence)
 > Jeu de pong multijoueur en temps réel (auth, chat, API).
 <a href="https://github.com/The-mallocers/Transcendence">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=The-mallocers&repo=Transcendence&theme=dark&bg_color=000000&title_color=00c8ff&icon_color=00c8ff" />
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=The-mallocers&repo=Transcendence&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
 </a>
 
 </td>
@@ -149,7 +138,7 @@
 ### ⚙️ [Teqo_Tweaker](https://github.com/Ekyoz/TEQO-Tweaker)
 > Logiciel pour gérer le son de chaque application sur Windows.
 <a href="https://github.com/Ekyoz/TEQO-Tweaker">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=Ekyoz&repo=TEQO-Tweaker&theme=dark&bg_color=000000&title_color=00c8ff&icon_color=00c8ff" />
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=Ekyoz&repo=TEQO-Tweaker&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
 </a>
 
 </td>
@@ -158,7 +147,7 @@
 ### 🧠 [MCSM](https://github.com/Mizu-cmd/MCSM)
 > Gestion et création de serveurs Minecraft via une interface intuitive.
 <a href="https://github.com/Mizu-cmd/MCSM">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=Mizu-cmd&repo=MCSM&theme=dark&bg_color=000000&title_color=00c8ff&icon_color=00c8ff" />
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=Mizu-cmd&repo=MCSM&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
 </a>
 
 </td>
@@ -167,24 +156,22 @@
 
 </div>
 
----
+## ⏱️ Statistiques de codage WakaTime
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api/wakatime?username=ekyoz&layout=compact" alt="Statistiques de codage WakaTime" />
+</div>
+
 
 ## 🎯 Objectif professionnel
 Continuer à progresser en **C++**, en **systèmes embarqués**, et à explorer l’**intelligence artificielle** appliquée.  
 Je cherche à construire des logiciels **robustes, performants et intelligents**.
 
----
-
 ## 📄 Mon parcours à 42
 🎓 Consulte mon **transcript officiel** :  
 [➡️ Télécharger mon transcript (PDF)](./transcript.pdf)
 
----
-
 ## 📫 Contact
 📧 **alexandre.tresallet@gmail.com**  
 🌐 [**GitHub - Ekyoz**](https://github.com/Ekyoz)
-
----
 
 💡 *“La rigueur construit les fondations, la curiosité trace la voie.”*
