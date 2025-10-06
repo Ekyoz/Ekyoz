@@ -172,7 +172,9 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 
 ## ⏱️ Statistiques de codage
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api/wakatime?username=ekyoz&layout=compact" alt="Statistiques de codage WakaTime" />
+  <a href="https://github.com/Ekyoz">
+    <img src="https://github-readme-stats.vercel.app/api/wakatime?username=ekyoz&layout=compact" alt="Statistiques de codage WakaTime" />
+  </a>
 </div>
 
 ## 📫 Contact
