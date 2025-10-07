@@ -1,5 +1,7 @@
 # 👋 Salut, je suis Alexandre
 
+<p align="left"> <img src="https://komarev.com/ghpvc/?username=ekyoz&label=Nombres%20de%20vues&color=0e75b6&style=for-the-badge" alt="ekyoz" /> </p>
+
 🎓 Étudiant à **42 Lyon**  
 💡 Passionné par le **développement logiciel**, l’**intelligence artificielle** et les **systèmes embarqués**.  
 🔧 Développeur axé sur la **qualité du code** et l’**apprentissage continu**.  
@@ -138,7 +140,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 </td>
 <td align="center" width="33%">
   
-### ⚙️ [Teqo_Tweaker](https://github.com/Ekyoz/TEQO-Tweaker)
+### 🎛️ [Teqo_Tweaker](https://github.com/Ekyoz/TEQO-Tweaker)
 > Logiciel pour gérer le son de chaque application sur Windows.
 <a href="https://github.com/Ekyoz/TEQO-Tweaker">
   <img src="https://github-readme-stats.vercel.app/api/pin/?username=Ekyoz&repo=TEQO-Tweaker&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
@@ -147,7 +149,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 </td>
 <td align="center" width="33%">
   
-### 🧠 [MCSM](https://github.com/Mizu-cmd/MCSM)
+### 📟 [MCSM](https://github.com/Mizu-cmd/MCSM)
 > Gestion et création de serveurs Minecraft via une interface intuitive.
 <a href="https://github.com/Mizu-cmd/MCSM">
   <img src="https://github-readme-stats.vercel.app/api/pin/?username=Mizu-cmd&repo=MCSM&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
@@ -167,6 +169,9 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
   </a>
   <a href="https://github.com/Ekyoz">
     <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ekyoz&layout=donut&hide=html,makefile,objective-c,roff&size_weight=0.5&count_weight=0.5&custom_title=Langages%20les%20plus%20utilis%C3%A9s%20🚀&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
+  </a>
+  <a href="https://github.com/Ekyoz">
+    <img height="180em" src="http://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=Ekyoz&theme=default&exclude=html" />
   </a>
 </div>
 
