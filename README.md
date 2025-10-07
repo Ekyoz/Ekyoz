@@ -1,6 +1,4 @@
-# 👋 Salut, je suis Alexandre
-
-<p align="left"> <img src="https://komarev.com/ghpvc/?username=ekyoz&label=Nombres%20de%20vues&color=0e75b6&style=for-the-badge" alt="ekyoz" /> </p>
+<h1>👋 Salut, je suis Alexandre <img align="right" src="https://komarev.com/ghpvc/?username=ekyoz&label=Nombres%20de%20vues&color=0e75b6&style=for-the-badge" alt="ekyoz" /></h1>
 
 🎓 Étudiant à **42 Lyon**  
 💡 Passionné par le **développement logiciel**, l’**intelligence artificielle** et les **systèmes embarqués**.  
