@@ -168,10 +168,10 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
     <img height="230em" src="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/profile-summary-card-output/github/0-profile-details.svg" />
   </a>
   <a href="https://github.com/Ekyoz">
-    <img height="180em" src="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/profile-summary-card-output/github/3-stats.svg" />
+    <img height="200em" src="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/profile-summary-card-output/github/3-stats.svg" />
   </a>
   <a href="https://github.com/Ekyoz">
-    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ekyoz&layout=donut&hide=html,makefile,objective-c,roff&size_weight=0.5&count_weight=0.5&custom_title=Langages%20les%20plus%20utilis%C3%A9s%20🚀&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
+    <img height="200em" src="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/profile-summary-card-output/github/1-repos-per-language.svg" />
   </a>
 </div>
 
