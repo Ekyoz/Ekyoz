@@ -20,3 +20,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SUMMARY_CARD_TOKEN }}
         with:
           USERNAME: ${{ github.repository_owner }}
+          EXCLUDE: "html"
