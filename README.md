@@ -5,8 +5,8 @@
 🔧 Développeur axé sur la **qualité du code** et l’**apprentissage continu**.  
 
 ## 🧠 Domaines d’intérêt
-- 🤖 **Intelligence Artificielle**
 - ⚙️ **Systèmes embarqués**
+- 🤖 **Intelligence Artificielle**
 - 🧩 **Architecture logicielle & optimisation**
 
 ---
@@ -182,7 +182,6 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 
 ## 📫 Contact
 📧 **Mon email** : [alexandre.tresallet@gmail.com](mailto:alexandre.tresallet@gmail.com)  
-📱 **Mon Téléphone** : [+33 7 69 59 90 34](tel:+33769599034)  
 💼 **Mon LinkedIn** : [alexandre-tresallet](https://linkedin.com/in/alexandre-tresallet/)
 
 💡 *“La rigueur construit les fondations, la curiosité trace la voie.”*
