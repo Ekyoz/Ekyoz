@@ -8,10 +8,15 @@ plugins=(
   git
   docker
   docker-compose
-  z                          # jump rapide dans les dossiers fréquents
-  history-substring-search   # recherche dans l'historique avec ↑/↓
-  zsh-autosuggestions        # suggestions fish-style
-  zsh-syntax-highlighting    # coloration syntaxique (toujours en dernier)
+  npm
+  node
+  python
+  pip
+  sudo
+  z
+  history-substring-search
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
  
 source $ZSH/oh-my-zsh.sh
