@@ -18,7 +18,12 @@ source $ZSH/oh-my-zsh.sh
  
 # ── Langue ────────────────────────────────────────────────────────────────────
 export LANG=fr_FR.UTF-8
- 
+
+# ── Locale / Time format (24h) ────────────────────────────────────────────
+# C.UTF-8 garde un format neutre (pas AM/PM), pratique pour un affichage 24h
+export LANG=fr_FR.UTF-8
+export LC_TIME=C.UTF-8
+
 # ── Historique ────────────────────────────────────────────────────────────────
 HISTSIZE=20000
 SAVEHIST=20000
