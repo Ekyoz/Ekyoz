@@ -51,7 +51,7 @@ clone_plugin() {
     warn "$name déjà présent — skip"
   else
     info "Clonage de $name..."
-    git clone --depth=1 "$url" "$dest"
+    git clone --depth=1 -q "$url" "$dest"
   fi
 }
 
