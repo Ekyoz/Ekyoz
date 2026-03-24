@@ -101,4 +101,8 @@ gclean() {
   git branch --merged | grep -v "\*" | grep -vE "main|master|develop|dev" | xargs -r git branch -d
 }
 
+wipef() {
+  : > "$1"
+}
+
 # Ajoute tes fonctions ici
