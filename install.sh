@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+# =============================================================================
+# install.sh — Configuration zsh portable (Linux / macOS, sans sudo)
+# Usage : curl -fsSL https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/install.sh | bash
+# =============================================================================
+set -e
+
+RAW_BASE="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/dotfiles/zsh"
+
+# ── Couleurs ──────────────────────────────────────────────────────────────────
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
+info()  { echo -e "${GREEN}[✔]${NC} $1"; }
+warn()  { echo -e "${YELLOW}[!]${NC} $1"; }
+error() { echo -e "${RED}[✘]${NC} $1"; exit 1; }
+step()  { echo -e "\n${BLUE}──────────────────────────────${NC}\n${BLUE}$1${NC}"; }
+
+# ── Détection OS ──────────────────────────────────────────────────────────────
+OS="$(uname -s)"
+case "$OS" in
+  Linux*)   PLATFORM="linux" ;;
+  Darwin*)  PLATFORM="macos" ;;
+  *)        error "OS non supporté : $OS" ;;
+esac
+info "Plateforme détectée : $PLATFORM"
+
+# ── Vérification zsh ──────────────────────────────────────────────────────────
+step "Vérification de zsh"
+if ! command -v zsh &>/dev/null; then
+  error "zsh n'est pas installé.\n  → Linux : sudo apt install zsh\n  → macOS : brew install zsh"
+fi
+info "zsh $(zsh --version | awk '{print $2}') trouvé"
+
+# ── Oh My Zsh ─────────────────────────────────────────────────────────────────
+step "Oh My Zsh"
+if [ -d "$HOME/.oh-my-zsh" ]; then
+  warn "Oh My Zsh déjà installé — skip"
+else
+  info "Installation de Oh My Zsh..."
+  RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  info "Oh My Zsh installé"
+fi
+
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# ── Plugins externes ──────────────────────────────────────────────────────────
+step "Plugins externes"
+
+clone_plugin() {
+  local name="$1" url="$2" dest="$ZSH_CUSTOM/plugins/$1"
+  if [ -d "$dest" ]; then
+    warn "$name déjà présent — skip"
+  else
+    info "Clonage de $name..."
+    git clone --depth=1 "$url" "$dest"
+  fi
+}
+
+clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosuggestions"
+clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
+
+# ── Téléchargement des dotfiles ───────────────────────────────────────────────
+step "Téléchargement des dotfiles"
+
+download() {
+  local src="$1" dest="$2"
+  if curl -fsSL "$src" -o "$dest"; then
+    info "$(basename $dest) → $dest"
+  else
+    error "Impossible de télécharger $src"
+  fi
+}
+
+# Sauvegarde du .zshrc existant
+[ -f "$HOME/.zshrc" ] && cp "$HOME/.zshrc" "$HOME/.zshrc.bak.$(date +%Y%m%d%H%M%S)" && warn ".zshrc existant sauvegardé"
+
+download "$RAW_BASE/.zshrc"      "$HOME/.zshrc"
+download "$RAW_BASE/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
+
+# ── macros.zsh (template vide si absent dans le repo) ─────────────────────────
+step "Macros"
+MACROS_FILE="$ZSH_CUSTOM/macros.zsh"
+
+if [ -f "$MACROS_FILE" ]; then
+  warn "macros.zsh déjà présent — skip"
+elif curl -fsSL "$RAW_BASE/macros.zsh" -o "$MACROS_FILE" 2>/dev/null; then
+  info "macros.zsh téléchargé"
+else
+  warn "macros.zsh absent du repo — création d'un template vide"
+  cat > "$MACROS_FILE" << 'MACROS'
+# =============================================================================
+# macros.zsh — Fonctions shell personnelles
+# =============================================================================
+
+# Créer un dossier et s'y déplacer
+mkcd() { mkdir -p "$1" && cd "$1"; }
+MACROS
+fi
+
+# ── Shell par défaut ──────────────────────────────────────────────────────────
+step "Shell par défaut"
+if [ "$(basename "$SHELL")" != "zsh" ]; then
+  warn "Shell actuel : $SHELL"
+  warn "Pour passer à zsh : chsh -s $(command -v zsh)"
+else
+  info "zsh est déjà ton shell par défaut"
+fi
+
+# ── Fin ───────────────────────────────────────────────────────────────────────
+echo -e "\n${GREEN}════════════════════════════════════${NC}"
+echo -e "${GREEN}  ✅ Setup terminé !${NC}"
+echo -e "${GREEN}════════════════════════════════════${NC}"
+echo -e "  Lance : ${YELLOW}exec zsh${NC}"
