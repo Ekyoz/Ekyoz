@@ -76,6 +76,15 @@ download() {
 download "$RAW_BASE/.zshrc"      "$HOME/.zshrc"
 download "$RAW_BASE/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
 
+# Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
+if grep -q '^export LC_TIME=' "$HOME/.zshrc"; then
+  sed -i.bak 's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc" 2>/dev/null || \
+  sed -i ''   's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc"
+else
+  printf '\n# Format horaire 24h\nexport LC_TIME=fr_FR.UTF-8\n' >> "$HOME/.zshrc"
+fi
+info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
+
 # ── macros.zsh (template vide si absent dans le repo) ─────────────────────────
 step "Macros"
 MACROS_FILE="$ZSH_CUSTOM/macros.zsh"
