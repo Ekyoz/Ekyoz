@@ -1,14 +1,15 @@
 # =============================================================================
 # aliases.zsh — Aliases personnels
 # =============================================================================
- 
+
 #------- MAIN -------#
-alias zsh="nano ~/.zshrc"
-alias zsh-alias="nano $ZSH_CUSTOM/aliases.zsh"
-alias reload="source ~/.zshrc"
- 
+alias zsh='$EDITOR ~/.zshrc'
+alias zsh-alias='$EDITOR $ZSH_CUSTOM/aliases.zsh'
+alias zsh-macros='$EDITOR $ZSH_CUSTOM/macros.zsh'
+alias reload='source ~/.zshrc'
+
 #------ UTILITIES ------#
-alias cls=clear
-alias wipe="echo '' > "
- 
-# Ajoute tes aliases ici 
+alias cls='clear'
+alias wipe='echo "" > '
+
+# Ajoute tes aliases ici
