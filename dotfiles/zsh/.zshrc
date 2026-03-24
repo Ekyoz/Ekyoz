@@ -50,3 +50,6 @@ export EDITOR='vim'
 # ── Custom files ──────────────────────────────────────────────────────────────
 # Chargés automatiquement par Oh My Zsh depuis $ZSH_CUSTOM/
 # → aliases.zsh, macros.zsh
+
+# ── Ovveride locaux ──────────────────────────────────────────────────────────────
+[[ -f "$ZSH_CUSTOM/local.zsh" ]] && source "$ZSH_CUSTOM/local.zsh"
