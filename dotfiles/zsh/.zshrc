@@ -1,0 +1,42 @@
+# ── Oh My Zsh ────────────────────────────────────────────────────────────────
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="aussiegeek"
+ 
+# ── Plugins ───────────────────────────────────────────────────────────────────
+# Note : zsh-syntax-highlighting doit toujours être en dernier
+plugins=(
+  git
+  docker
+  docker-compose
+  z                          # jump rapide dans les dossiers fréquents
+  history-substring-search   # recherche dans l'historique avec ↑/↓
+  zsh-autosuggestions        # suggestions fish-style
+  zsh-syntax-highlighting    # coloration syntaxique (toujours en dernier)
+)
+ 
+source $ZSH/oh-my-zsh.sh
+ 
+# ── Langue ────────────────────────────────────────────────────────────────────
+export LANG=fr_FR.UTF-8
+ 
+# ── Historique ────────────────────────────────────────────────────────────────
+HISTSIZE=20000
+SAVEHIST=20000
+setopt HIST_IGNORE_DUPS    # pas de doublons consécutifs
+setopt HIST_IGNORE_SPACE   # exclure les commandes précédées d'un espace
+setopt SHARE_HISTORY       # partager l'historique entre sessions
+ 
+# ── Comportement ──────────────────────────────────────────────────────────────
+setopt AUTO_CD             # taper un dossier = cd automatique
+setopt CORRECT             # correction automatique des typos
+ 
+# ── Couleur autosuggestions ───────────────────────────────────────────────────
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
+ 
+# ── Éditeur ───────────────────────────────────────────────────────────────────
+export EDITOR='vim'
+[ "$(command -v nvim)" ] && export EDITOR='nvim'
+ 
+# ── Custom files ──────────────────────────────────────────────────────────────
+# Chargés automatiquement par Oh My Zsh depuis $ZSH_CUSTOM/
+# → aliases.zsh, macros.zsh
