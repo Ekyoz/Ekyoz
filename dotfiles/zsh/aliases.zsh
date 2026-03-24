@@ -10,6 +10,8 @@ alias reload='source ~/.zshrc'
 
 #------ UTILITIES ------#
 alias cls='clear'
-alias wipe='echo "" > '
+alias wipef=wipef() {
+  : > "$1"
+}
 
 # Ajoute tes aliases ici
