@@ -35,12 +35,17 @@ step "Oh My Zsh"
 if [ -d "$HOME/.oh-my-zsh" ]; then
   warn "Oh My Zsh déjà installé — skip"
 else
-  info "Installation de Oh My Zsh..."
-  RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  info "Oh My Zsh installé"
+  info "Installation silencieuse de Oh My Zsh..."
+  if curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | \
+    RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -s -- --unattended >/dev/null 2>&1; then
+    info "Oh My Zsh installé"
+  else
+    error "Échec de l'installation silencieuse de Oh My Zsh"
+  fi
 fi
 
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+BACKUP_DIR="$HOME/.oh-my-zsh/backups"
 
 # ── Plugins externes ──────────────────────────────────────────────────────────
 step "Plugins externes"
@@ -59,13 +64,13 @@ clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosugge
 clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
 
 # ── Téléchargement des fichiers zsh ───────────────────────────────────────────
-step "Configuration zsh (fichiers)"
+step "Téléchargement des fichiers zsh"
 
-ask_backup_if_exists() {
-  local dest="$1" answer="" timestamp=""
+ask_backup_if_different() {
+  local dest="$1" answer="" timestamp="" rel_path="" backup_name=""
   [ -f "$dest" ] || return 0
 
-  warn "$(basename "$dest") existe déjà"
+  warn "$(basename "$dest") diffère de la version distante"
   if [ -r /dev/tty ]; then
     read -r -p "Créer une sauvegarde avant remplacement ? [y/N] " answer < /dev/tty
   else
@@ -76,8 +81,11 @@ ask_backup_if_exists() {
   case "$answer" in
     [yY]|[yY][eE][sS]|[oO]|[oO][uU][iI])
       timestamp="$(date +%Y%m%d%H%M%S)"
-      cp "$dest" "$dest.bak.$timestamp"
-      info "Sauvegarde créée : $dest.bak.$timestamp"
+      mkdir -p "$BACKUP_DIR"
+      rel_path="${dest#"$HOME/"}"
+      backup_name="${rel_path//\//__}.bak.$timestamp"
+      cp "$dest" "$BACKUP_DIR/$backup_name"
+      info "Sauvegarde créée : $BACKUP_DIR/$backup_name"
       ;;
     *)
       info "Pas de sauvegarde, remplacement direct"
@@ -86,15 +94,25 @@ ask_backup_if_exists() {
 }
 
 download() {
-  local src="$1" dest="$2" optional="${3:-false}"
+  local src="$1" dest="$2" optional="${3:-false}" tmp_file=""
 
   mkdir -p "$(dirname "$dest")"
-  ask_backup_if_exists "$dest"
+  tmp_file="$(mktemp)" || error "Impossible de créer un fichier temporaire"
 
-  if curl -fsSL "$src" -o "$dest"; then
+  if curl -fsSL "$src" -o "$tmp_file"; then
+    if [ -f "$dest" ] && cmp -s "$dest" "$tmp_file"; then
+      rm -f "$tmp_file"
+      info "$(basename "$dest") déjà à jour"
+      return 0
+    fi
+
+    ask_backup_if_different "$dest"
+    mv "$tmp_file" "$dest"
     info "$(basename "$dest") téléchargé"
     return 0
   fi
+
+  rm -f "$tmp_file"
 
   if [ "$optional" = "true" ]; then
     warn "$(basename "$dest") introuvable dans le dépôt distant"
@@ -107,6 +125,10 @@ download() {
 download "$RAW_BASE/.zshrc" "$HOME/.zshrc"
 download "$RAW_BASE/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
 download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
+download "$RAW_BASE/macros.zsh" "$ZSH_CUSTOM/macros.zsh" "true"
+
+# ── Configuration zsh ──────────────────────────────────────────────────────────
+step "Configuration zsh"
 
 # Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
 if grep -q '^export LC_TIME=' "$HOME/.zshrc"; then
@@ -119,18 +141,9 @@ info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
 
 # macros.zsh (template vide si absent dans le repo)
 MACROS_FILE="$ZSH_CUSTOM/macros.zsh"
-if [ -f "$MACROS_FILE" ]; then
-  MACROS_EXISTED=true
-else
-  MACROS_EXISTED=false
-fi
-
-if ! download "$RAW_BASE/macros.zsh" "$MACROS_FILE" "true"; then
-  if [ "$MACROS_EXISTED" = "true" ]; then
-    warn "macros.zsh local conservé"
-  else
-    warn "macros.zsh absent du repo — création d'un template vide"
-    cat > "$MACROS_FILE" << 'MACROS'
+if [ ! -f "$MACROS_FILE" ]; then
+  warn "macros.zsh absent du repo — création d'un template vide"
+  cat > "$MACROS_FILE" << 'MACROS'
 # =============================================================================
 # macros.zsh — Fonctions shell personnelles
 # =============================================================================
@@ -138,7 +151,6 @@ if ! download "$RAW_BASE/macros.zsh" "$MACROS_FILE" "true"; then
 # Créer un dossier et s'y déplacer
 mkcd() { mkdir -p "$1" && cd "$1"; }
 MACROS
-  fi
 fi
 
 # ── Éditeur par défaut ────────────────────────────────────────────────────────

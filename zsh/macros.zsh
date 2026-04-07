@@ -183,4 +183,22 @@ wipef() {
   : > "$1"
 }
 
+# Supprimer toutes les sauvegardes créées par l'installateur
+# usage: omz-clean-backups
+omz-clean-backups() {
+  local _backup_dir="$HOME/.oh-my-zsh/backups"
+
+  if [[ ! -d "$_backup_dir" ]]; then
+    echo "Aucun dossier de sauvegarde trouvé: $_backup_dir"
+    return 0
+  fi
+
+  if find "$_backup_dir" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then
+    rm -rf "$_backup_dir"/*
+    echo "Sauvegardes supprimées dans: $_backup_dir"
+  else
+    echo "Aucune sauvegarde à supprimer dans: $_backup_dir"
+  fi
+}
+
 # Ajoute tes fonctions ici
