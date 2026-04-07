@@ -1,6 +1,6 @@
 # ── Oh My Zsh ────────────────────────────────────────────────────────────────
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="aussiegeek"
+ZSH_THEME="aussiegeek-custom"
  
 # ── Plugins ───────────────────────────────────────────────────────────────────
 # Note : zsh-syntax-highlighting doit toujours être en dernier

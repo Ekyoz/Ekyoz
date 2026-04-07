@@ -109,6 +109,7 @@ download() {
 
 download "$RAW_BASE/.zshrc" "$HOME/.zshrc"
 download "$RAW_BASE/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
+download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
 
 # Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
 if grep -q '^export LC_TIME=' "$HOME/.zshrc"; then
