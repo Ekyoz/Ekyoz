@@ -11,6 +11,7 @@ alias zsh-update="curl -fsSL https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/
 
 #------- MAIN -------#
 alias reload='source ~/.zshrc'
+alias e='$EDITOR'
 
 #------ UTILITIES ------#
 alias cls='clear'
