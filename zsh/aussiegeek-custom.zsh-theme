@@ -1,5 +1,5 @@
 HOST_SEGMENT="%m"
-if [[ -n "${HOST:-}" ]]; then
+if [[ -n "${HOSTNAME:-${HOST:-}}" ]]; then
   HOST_SEGMENT="%{${fg[red]}%}%m"
 fi
 
