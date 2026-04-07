@@ -79,9 +79,6 @@ ask_backup_if_exists() {
       cp "$dest" "$dest.bak.$timestamp"
       info "Sauvegarde créée : $dest.bak.$timestamp"
       ;;
-    "")
-      info "Pas de sauvegarde, remplacement direct"
-      ;;
     *)
       info "Pas de sauvegarde, remplacement direct"
       ;;
