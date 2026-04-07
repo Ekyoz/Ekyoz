@@ -79,6 +79,9 @@ ask_backup_if_exists() {
       cp "$dest" "$dest.bak.$timestamp"
       info "Sauvegarde créée : $dest.bak.$timestamp"
       ;;
+    "")
+      info "Pas de sauvegarde, remplacement direct"
+      ;;
     *)
       info "Pas de sauvegarde, remplacement direct"
       ;;
@@ -119,7 +122,11 @@ info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
 # macros.zsh (template vide si absent dans le repo)
 MACROS_FILE="$ZSH_CUSTOM/macros.zsh"
 MACROS_EXISTED=false
-[ -f "$MACROS_FILE" ] && MACROS_EXISTED=true
+if [ -f "$MACROS_FILE" ]; then
+  MACROS_EXISTED=true
+else
+  MACROS_EXISTED=false
+fi
 
 if ! download "$RAW_BASE/macros.zsh" "$MACROS_FILE" "true"; then
   if [ "$MACROS_EXISTED" = "true" ]; then
