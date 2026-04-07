@@ -62,7 +62,7 @@ clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-
 step "Configuration zsh (fichiers)"
 
 ask_backup_if_exists() {
-  local dest="$1" answer=""
+  local dest="$1" answer="" timestamp=""
   [ -f "$dest" ] || return 0
 
   warn "$(basename "$dest") existe déjà"
@@ -75,8 +75,9 @@ ask_backup_if_exists() {
 
   case "$answer" in
     [yY]|[yY][eE][sS]|[oO]|[oO][uU][iI])
-      cp "$dest" "$dest.bak.$(date +%Y%m%d%H%M%S)"
-      info "Sauvegarde créée : $dest.bak.<timestamp>"
+      timestamp="$(date +%Y%m%d%H%M%S)"
+      cp "$dest" "$dest.bak.$timestamp"
+      info "Sauvegarde créée : $dest.bak.$timestamp"
       ;;
     *)
       info "Pas de sauvegarde, remplacement direct"
