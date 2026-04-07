@@ -115,7 +115,7 @@ if zsh -ic "$zsh_editor_runner"; then
   info "Configuration de l'éditeur effectuée via zsh-editor"
 else
   warn "Impossible d'exécuter zsh-editor, fallback sur vim"
-  _tmp="$(grep -v '^export EDITOR=' "$LOCAL_ZSH" 2>/dev/null)"
+  _tmp="$(grep -v '^export EDITOR=' "$LOCAL_ZSH" 2>/dev/null || true)"
   printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "vim" > "$LOCAL_ZSH"
   info "EDITOR='vim' enregistré dans $LOCAL_ZSH"
 fi
