@@ -84,7 +84,7 @@ zsh-editor() {
   fi
   _choice="${_choice:-1}"
 
-  if [[ ! "$_choice" =~ '^[0-9]+$' ]] || (( _choice < 1 || _choice > ${#_editors[@]} )); then
+  if [[ "$_choice" != <-> ]] || (( _choice < 1 || _choice > ${#_editors[@]} )); then
     echo "Choix invalide."
     return 1
   fi
