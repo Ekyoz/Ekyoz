@@ -58,22 +58,52 @@ clone_plugin() {
 clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosuggestions"
 clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
 
-# ── Téléchargement des fichiers zsh ───────────────────────────────────────────────
-step "Téléchargement des fichiers zsh"
+# ── Téléchargement des fichiers zsh ───────────────────────────────────────────
+step "Configuration zsh (fichiers)"
 
-download() {
-  local src="$1" dest="$2"
-  if curl -fsSL "$src" -o "$dest"; then
-    info "$(basename $dest) → $dest"
+ask_backup_if_exists() {
+  local dest="$1" answer=""
+  [ -f "$dest" ] || return 0
+
+  warn "$(basename "$dest") existe déjà"
+  if [ -r /dev/tty ]; then
+    read -r -p "Créer une sauvegarde avant remplacement ? [y/N] " answer < /dev/tty
   else
-    error "Impossible de télécharger $src"
+    warn "Aucun terminal interactif détecté, pas de sauvegarde demandée"
+    return 0
   fi
+
+  case "$answer" in
+    [yY]|[yY][eE][sS]|[oO]|[oO][uU][iI])
+      cp "$dest" "$dest.bak.$(date +%Y%m%d%H%M%S)"
+      info "Sauvegarde créée : $dest.bak.<timestamp>"
+      ;;
+    *)
+      info "Pas de sauvegarde, remplacement direct"
+      ;;
+  esac
 }
 
-# Sauvegarde du .zshrc existant
-[ -f "$HOME/.zshrc" ] && cp "$HOME/.zshrc" "$HOME/.zshrc.bak.$(date +%Y%m%d%H%M%S)" && warn ".zshrc existant sauvegardé"
+download() {
+  local src="$1" dest="$2" optional="${3:-false}"
 
-download "$RAW_BASE/.zshrc"      "$HOME/.zshrc"
+  mkdir -p "$(dirname "$dest")"
+  ask_backup_if_exists "$dest"
+
+  if curl -fsSL "$src" -o "$dest"; then
+    info "$(basename "$dest") téléchargé"
+    return 0
+  fi
+
+  if [ "$optional" = "true" ]; then
+    warn "$(basename "$dest") introuvable dans le dépôt distant"
+    return 1
+  fi
+
+  error "Impossible de télécharger : $src"
+}
+
+download "$RAW_BASE/.zshrc" "$HOME/.zshrc"
 download "$RAW_BASE/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
 
 # Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
@@ -85,17 +115,17 @@ else
 fi
 info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
 
-# ── macros.zsh (template vide si absent dans le repo) ─────────────────────────
-step "Macros"
+# macros.zsh (template vide si absent dans le repo)
 MACROS_FILE="$ZSH_CUSTOM/macros.zsh"
+MACROS_EXISTED=false
+[ -f "$MACROS_FILE" ] && MACROS_EXISTED=true
 
-if [ -f "$MACROS_FILE" ]; then
-  warn "macros.zsh déjà présent — skip"
-elif curl -fsSL "$RAW_BASE/macros.zsh" -o "$MACROS_FILE" 2>/dev/null; then
-  info "macros.zsh téléchargé"
-else
-  warn "macros.zsh absent du repo — création d'un template vide"
-  cat > "$MACROS_FILE" << 'MACROS'
+if ! download "$RAW_BASE/macros.zsh" "$MACROS_FILE" "true"; then
+  if [ "$MACROS_EXISTED" = "true" ]; then
+    warn "macros.zsh local conservé"
+  else
+    warn "macros.zsh absent du repo — création d'un template vide"
+    cat > "$MACROS_FILE" << 'MACROS'
 # =============================================================================
 # macros.zsh — Fonctions shell personnelles
 # =============================================================================
@@ -103,10 +133,11 @@ else
 # Créer un dossier et s'y déplacer
 mkcd() { mkdir -p "$1" && cd "$1"; }
 MACROS
+  fi
 fi
 
 # ── Éditeur par défaut ────────────────────────────────────────────────────────
-step "Éditeur par défaut"
+step "Configuration éditeur"
 LOCAL_ZSH="$ZSH_CUSTOM/local.zsh"
 touch "$LOCAL_ZSH"
 zsh_editor_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; source '$MACROS_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"
