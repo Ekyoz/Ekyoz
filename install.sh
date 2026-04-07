@@ -113,13 +113,29 @@ echo "  2) vim"
 echo "  3) nvim"
 echo "  4) code (VSCode)"
 echo "  5) Autre"
-read -r -p "Votre choix (1-5) [2] : " _editor_choice
+if [ -t 0 ]; then
+  read -r -p "Votre choix (1-5) [2] : " _editor_choice
+elif [ -r /dev/tty ] && read -r -p "Votre choix (1-5) [2] : " _editor_choice < /dev/tty; then
+  :
+else
+  warn "Aucun terminal interactif détecté, choix par défaut (vim)"
+  _editor_choice=""
+fi
 case "${_editor_choice:-2}" in
   1) EDITOR_NAME="nano" ;;
   2) EDITOR_NAME="vim"  ;;
   3) EDITOR_NAME="nvim" ;;
   4) EDITOR_NAME="code" ;;
-  5) read -r -p "Entrez le nom de l'éditeur : " EDITOR_NAME ;;
+  5)
+    if [ -t 0 ]; then
+      read -r -p "Entrez le nom de l'éditeur : " EDITOR_NAME
+    elif [ -r /dev/tty ] && read -r -p "Entrez le nom de l'éditeur : " EDITOR_NAME < /dev/tty; then
+      :
+    else
+      warn "Aucun terminal interactif détecté, vim utilisé par défaut"
+      EDITOR_NAME="vim"
+    fi
+    ;;
   *) warn "Choix invalide, vim utilisé par défaut"; EDITOR_NAME="vim" ;;
 esac
 info "Éditeur sélectionné : $EDITOR_NAME"
