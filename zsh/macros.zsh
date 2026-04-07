@@ -37,6 +37,8 @@ extract() {
 # ── DEV HELPERS ──────────────────────────────────────────────────────────────
 
 # Git: status + branches + derniers commits
+# unalias gstl car oh-my-zsh le définit comme alias (git stash list)
+unalias gstl 2>/dev/null || true
 gstl() {
   git status -sb
   echo "----"
