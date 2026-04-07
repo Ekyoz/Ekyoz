@@ -7,6 +7,98 @@ mkcd() {
   mkdir -p "$1" && cd "$1"
 }
 
+# Changer l'éditeur par défaut avec détection dynamique
+zsh-editor() {
+  local _local_file="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/local.zsh"
+  local -a _editors
+  local -A _seen
+  local _cmd _line _desktop _desktop_file _exec _choice _editor _tmp
+
+  for _cmd in "${VISUAL%% *}" "${EDITOR%% *}"; do
+    [[ -z "$_cmd" ]] && continue
+    command -v "$_cmd" >/dev/null 2>&1 || continue
+    [[ -n "${_seen[$_cmd]}" ]] && continue
+    _editors+=("$_cmd")
+    _seen[$_cmd]=1
+  done
+
+  if command -v update-alternatives >/dev/null 2>&1; then
+    while IFS= read -r _line; do
+      _cmd="${_line##*/}"
+      [[ -z "$_cmd" ]] && continue
+      command -v "$_cmd" >/dev/null 2>&1 || continue
+      [[ -n "${_seen[$_cmd]}" ]] && continue
+      _editors+=("$_cmd")
+      _seen[$_cmd]=1
+    done < <(update-alternatives --list editor 2>/dev/null || true)
+  fi
+
+  if command -v xdg-mime >/dev/null 2>&1; then
+    _desktop="$(xdg-mime query default text/plain 2>/dev/null)"
+    if [[ -n "$_desktop" ]]; then
+      for _desktop_file in \
+        "$HOME/.local/share/applications/$_desktop" \
+        "/usr/local/share/applications/$_desktop" \
+        "/usr/share/applications/$_desktop"; do
+        [[ -f "$_desktop_file" ]] || continue
+        _exec="$(awk -F= '/^Exec=/{print $2; exit}' "$_desktop_file" 2>/dev/null)"
+        _cmd="${_exec%% *}"
+        _cmd="${_cmd//\"/}"
+        _cmd="${_cmd%%\%*}"
+        _cmd="${_cmd##*/}"
+        [[ -z "$_cmd" ]] && continue
+        command -v "$_cmd" >/dev/null 2>&1 || continue
+        [[ -n "${_seen[$_cmd]}" ]] && continue
+        _editors+=("$_cmd")
+        _seen[$_cmd]=1
+        break
+      done
+    fi
+  fi
+
+  if [[ "${#_editors[@]}" -eq 0 ]] && command -v editor >/dev/null 2>&1; then
+    _editors+=("editor")
+  fi
+  if [[ "${#_editors[@]}" -eq 0 ]] && command -v vi >/dev/null 2>&1; then
+    _editors+=("vi")
+  fi
+  if [[ "${#_editors[@]}" -eq 0 ]]; then
+    echo "Aucun éditeur détecté automatiquement."
+    return 1
+  fi
+
+  echo "Éditeurs détectés :"
+  local i=1
+  for _cmd in "${_editors[@]}"; do
+    echo "  $i) $_cmd"
+    ((i++))
+  done
+
+  if [[ -t 0 ]]; then
+    read "_choice?Votre choix (1-${#_editors[@]}) [1] : "
+  elif [[ -r /dev/tty ]]; then
+    read "_choice?Votre choix (1-${#_editors[@]}) [1] : " < /dev/tty || _choice=""
+  else
+    _choice="1"
+    echo "Aucun terminal interactif détecté, éditeur par défaut: ${_editors[1]}"
+  fi
+  _choice="${_choice:-1}"
+
+  # <-> : pattern zsh qui valide une chaîne composée uniquement de chiffres.
+  if [[ "$_choice" != <-> ]] || (( _choice < 1 || _choice > ${#_editors[@]} )); then
+    echo "Choix invalide."
+    return 1
+  fi
+
+  _editor="${_editors[$_choice]}"
+  touch "$_local_file"
+  _tmp="$(grep -v '^export EDITOR=' "$_local_file" 2>/dev/null || true)"
+  printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "$_editor" > "$_local_file"
+  export EDITOR="$_editor"
+  source "$_local_file"
+  echo "Éditeur défini sur : $_editor (rechargement automatique effectué)"
+}
+
 # Afficher les ports en écoute (Linux + macOS)
 ports() {
   if command -v ss &>/dev/null; then
