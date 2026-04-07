@@ -184,6 +184,7 @@ wipef() {
 }
 
 # Supprimer toutes les sauvegardes créées par l'installateur
+# usage: omz-clean-backups
 omz-clean-backups() {
   local _backup_dir="$HOME/.oh-my-zsh/backups"
 

@@ -66,7 +66,7 @@ clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-
 # ── Téléchargement des fichiers zsh ───────────────────────────────────────────
 step "Téléchargement des fichiers zsh"
 
-ask_backup_if_exists() {
+ask_backup_if_different() {
   local dest="$1" answer="" timestamp="" rel_path="" backup_name=""
   [ -f "$dest" ] || return 0
 
@@ -97,7 +97,7 @@ download() {
   local src="$1" dest="$2" optional="${3:-false}" tmp_file=""
 
   mkdir -p "$(dirname "$dest")"
-  tmp_file="$(mktemp)"
+  tmp_file="$(mktemp)" || error "Impossible de créer un fichier temporaire"
 
   if curl -fsSL "$src" -o "$tmp_file"; then
     if [ -f "$dest" ] && cmp -s "$dest" "$tmp_file"; then
@@ -106,7 +106,7 @@ download() {
       return 0
     fi
 
-    ask_backup_if_exists "$dest"
+    ask_backup_if_different "$dest"
     mv "$tmp_file" "$dest"
     info "$(basename "$dest") téléchargé"
     return 0
