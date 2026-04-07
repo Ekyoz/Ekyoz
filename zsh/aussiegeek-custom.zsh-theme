@@ -1,4 +1,9 @@
-PROMPT="%{${fg_bold[blue]}%}[ %{${fg[black]}%}%T %{${fg_bold[blue]}%}] %{${fg_bold[blue]}%}[ %{${fg[red]}%}%n%{${fg_bold[blue]}%}@%{${fg[red]}%}%m%{${fg_bold[blue]}%}:%~\$(git_prompt_info)%{$reset_color%}"
+HOST_SEGMENT="%m"
+if [[ -n "${HOST:-}" ]]; then
+  HOST_SEGMENT="%{${fg[red]}%}%m"
+fi
+
+PROMPT="%{${fg_bold[blue]}%}[ %F{242}%T%f %{${fg_bold[blue]}%}] %{${fg_bold[blue]}%}[ %{${fg[red]}%}%n%{${fg_bold[red]}%}@${HOST_SEGMENT}%{${fg_bold[blue]}%}:%~\$(git_prompt_info) %{${fg_bold[blue]}%}]%{$reset_color%}"
 
 # git theming
 ZSH_THEME_GIT_PROMPT_PREFIX="%{${fg_bold[green]}%}("
