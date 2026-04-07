@@ -5,7 +5,7 @@
 # =============================================================================
 set -e
 
-RAW_BASE="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/dotfiles/zsh"
+RAW_BASE="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/zsh"
 
 # ── Couleurs ──────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
@@ -58,8 +58,8 @@ clone_plugin() {
 clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosuggestions"
 clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
 
-# ── Téléchargement des dotfiles ───────────────────────────────────────────────
-step "Téléchargement des dotfiles"
+# ── Téléchargement des fichiers zsh ───────────────────────────────────────────────
+step "Téléchargement des fichiers zsh"
 
 download() {
   local src="$1" dest="$2"
