@@ -122,7 +122,6 @@ info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
 
 # macros.zsh (template vide si absent dans le repo)
 MACROS_FILE="$ZSH_CUSTOM/macros.zsh"
-MACROS_EXISTED=false
 if [ -f "$MACROS_FILE" ]; then
   MACROS_EXISTED=true
 else
