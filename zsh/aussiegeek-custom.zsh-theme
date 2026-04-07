@@ -5,7 +5,7 @@ if [[ -n "${HOST_VALUE}" ]]; then
 fi
 
 PROMPT_TIME="%{${fg_bold[blue]}%}[ %F{242}%T%f %{${fg_bold[blue]}%}]"
-PROMPT_USER_HOST_PATH="%{${fg_bold[blue]}%}[ %{${fg[red]}%}%n%{${fg_bold[red]}%}@${HOST_SEGMENT}%{${fg_bold[blue]}%}:%~\$(git_prompt_info) %{${fg_bold[blue]}%}]"
+PROMPT_USER_HOST_PATH="%{${fg_bold[blue]}%}[ %{${fg[red]}%}%n%{${fg_bold[red]}%}@${HOST_SEGMENT}%{${fg_bold[blue]}%}]:%~\$(git_prompt_info) %{${fg_bold[blue]}%}"
 PROMPT="${PROMPT_TIME} ${PROMPT_USER_HOST_PATH}%{$reset_color%}"
 
 # git theming
