@@ -87,11 +87,6 @@ kport() {
   [ -n "$pid" ] && kill -9 "$pid" && echo "Killed PID $pid on port $1" || echo "Aucun process sur le port $1"
 }
 
-# Nettoyage branches locales mergées
-gclean() {
-  git branch --merged | grep -v "\*" | grep -vE "main|master|develop|dev" | xargs -r git branch -d
-}
-
 wipef() {
   : > "$1"
 }
