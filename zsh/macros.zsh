@@ -84,6 +84,7 @@ zsh-editor() {
   fi
   _choice="${_choice:-1}"
 
+  # <-> : pattern zsh qui valide une chaîne composée uniquement de chiffres.
   if [[ "$_choice" != <-> ]] || (( _choice < 1 || _choice > ${#_editors[@]} )); then
     echo "Choix invalide."
     return 1

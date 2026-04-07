@@ -109,8 +109,9 @@ fi
 step "Éditeur par défaut"
 LOCAL_ZSH="$ZSH_CUSTOM/local.zsh"
 touch "$LOCAL_ZSH"
+zsh_editor_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; source '$MACROS_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"
 
-if zsh -ic "export ZSH_CUSTOM='$ZSH_CUSTOM'; source '$MACROS_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"; then
+if zsh -ic "$zsh_editor_runner"; then
   info "Configuration de l'éditeur effectuée via zsh-editor"
 else
   warn "Impossible d'exécuter zsh-editor, fallback sur vim"
