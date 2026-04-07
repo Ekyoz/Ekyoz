@@ -105,6 +105,32 @@ mkcd() { mkdir -p "$1" && cd "$1"; }
 MACROS
 fi
 
+# ── Éditeur par défaut ────────────────────────────────────────────────────────
+step "Éditeur par défaut"
+echo "Quel éditeur par défaut voulez-vous utiliser ?"
+echo "  1) nano"
+echo "  2) vim"
+echo "  3) nvim"
+echo "  4) code (VSCode)"
+echo "  5) Autre"
+read -p "Votre choix (1-5) [2] : " _editor_choice
+case "${_editor_choice:-2}" in
+  1) EDITOR_NAME="nano" ;;
+  2) EDITOR_NAME="vim"  ;;
+  3) EDITOR_NAME="nvim" ;;
+  4) EDITOR_NAME="code" ;;
+  5) read -p "Entrez le nom de l'éditeur : " EDITOR_NAME ;;
+  *) warn "Choix invalide, vim utilisé par défaut"; EDITOR_NAME="vim" ;;
+esac
+info "Éditeur sélectionné : $EDITOR_NAME"
+
+# Écriture dans local.zsh (persiste entre les mises à jour)
+LOCAL_ZSH="$ZSH_CUSTOM/local.zsh"
+touch "$LOCAL_ZSH"
+_tmp="$(grep -v '^export EDITOR=' "$LOCAL_ZSH" 2>/dev/null)"
+printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "$EDITOR_NAME" > "$LOCAL_ZSH"
+info "EDITOR='$EDITOR_NAME' enregistré dans $LOCAL_ZSH"
+
 # ── Shell par défaut ──────────────────────────────────────────────────────────
 step "Shell par défaut"
 if [ "$(basename "$SHELL")" != "zsh" ]; then

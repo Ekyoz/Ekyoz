@@ -36,15 +36,6 @@ extract() {
 
 # ── DEV HELPERS ──────────────────────────────────────────────────────────────
 
-# Git: status + branches + derniers commits
-gstl() {
-  git status -sb
-  echo "----"
-  git branch --show-current
-  echo "----"
-  git log --oneline -n 8
-}
-
 # Git: commit rapide
 gac() {
   # usage: gac "message"
