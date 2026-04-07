@@ -58,18 +58,6 @@ clone_plugin() {
 clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosuggestions"
 clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
 
-read_from_terminal() {
-  local prompt="$1" __result_var="$2" value=""
-  if [ -t 0 ]; then
-    read -r -p "$prompt" value
-  elif [ -r /dev/tty ]; then
-    read -r -p "$prompt" value < /dev/tty || return 1
-  else
-    return 1
-  fi
-  printf -v "$__result_var" '%s' "$value"
-}
-
 # ── Téléchargement des fichiers zsh ───────────────────────────────────────────────
 step "Téléchargement des fichiers zsh"
 
@@ -119,37 +107,17 @@ fi
 
 # ── Éditeur par défaut ────────────────────────────────────────────────────────
 step "Éditeur par défaut"
-echo "Quel éditeur par défaut voulez-vous utiliser ?"
-echo "  1) nano"
-echo "  2) vim"
-echo "  3) nvim"
-echo "  4) code (VSCode)"
-echo "  5) Autre"
-if ! read_from_terminal "Votre choix (1-5) [2] : " _editor_choice; then
-  warn "Aucun terminal interactif détecté, choix par défaut: 2 (vim)"
-  _editor_choice=""
-fi
-case "${_editor_choice:-2}" in
-  1) EDITOR_NAME="nano" ;;
-  2) EDITOR_NAME="vim"  ;;
-  3) EDITOR_NAME="nvim" ;;
-  4) EDITOR_NAME="code" ;;
-  5)
-    if ! read_from_terminal "Entrez le nom de l'éditeur : " EDITOR_NAME; then
-      warn "Aucun terminal interactif détecté, vim utilisé par défaut"
-      EDITOR_NAME="vim"
-    fi
-    ;;
-  *) warn "Choix invalide, vim utilisé par défaut"; EDITOR_NAME="vim" ;;
-esac
-info "Éditeur sélectionné : $EDITOR_NAME"
-
-# Écriture dans local.zsh (persiste entre les mises à jour)
 LOCAL_ZSH="$ZSH_CUSTOM/local.zsh"
 touch "$LOCAL_ZSH"
-_tmp="$(grep -v '^export EDITOR=' "$LOCAL_ZSH" 2>/dev/null)"
-printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "$EDITOR_NAME" > "$LOCAL_ZSH"
-info "EDITOR='$EDITOR_NAME' enregistré dans $LOCAL_ZSH"
+
+if zsh -ic "export ZSH_CUSTOM='$ZSH_CUSTOM'; source '$MACROS_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"; then
+  info "Configuration de l'éditeur effectuée via zsh-editor"
+else
+  warn "Impossible d'exécuter zsh-editor, fallback sur vim"
+  _tmp="$(grep -v '^export EDITOR=' "$LOCAL_ZSH" 2>/dev/null)"
+  printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "vim" > "$LOCAL_ZSH"
+  info "EDITOR='vim' enregistré dans $LOCAL_ZSH"
+fi
 
 # ── Shell par défaut ──────────────────────────────────────────────────────────
 step "Shell par défaut"
