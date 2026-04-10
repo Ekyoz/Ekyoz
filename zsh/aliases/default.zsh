@@ -17,5 +17,3 @@ alias e='$EDITOR'
 
 #------ UTILITIES ------#
 alias cls='clear'
-
-# Ajoute les aliases communs ici
