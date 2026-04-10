@@ -158,10 +158,14 @@ step "Configuration zsh"
 # Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
 if grep -q '^export LC_TIME=' "$HOME/.zshrc"; then
   _tmp_zshrc="$(mktemp)" || error "Impossible de créer un fichier temporaire"
-  trap 'rm -f "$_tmp_zshrc"' EXIT
-  sed 's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc" > "$_tmp_zshrc"
-  mv "$_tmp_zshrc" "$HOME/.zshrc"
-  trap - EXIT
+  if ! sed 's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc" > "$_tmp_zshrc"; then
+    rm -f "$_tmp_zshrc"
+    error "Impossible de mettre à jour LC_TIME dans .zshrc"
+  fi
+  if ! mv "$_tmp_zshrc" "$HOME/.zshrc"; then
+    rm -f "$_tmp_zshrc"
+    error "Impossible de remplacer .zshrc"
+  fi
 else
   printf '\n# Format horaire 24h\nexport LC_TIME=fr_FR.UTF-8\n' >> "$HOME/.zshrc"
 fi
