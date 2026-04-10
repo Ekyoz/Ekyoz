@@ -185,7 +185,7 @@ wipef() {
 
 # Supprimer toutes les sauvegardes créées par l'installateur
 # usage: omz-clean-backups
-omz-clean-backups() {
+zsh-clean-backups() {
   local _backup_dir="$HOME/.oh-my-zsh/backups"
 
   if [[ ! -d "$_backup_dir" ]]; then
@@ -203,7 +203,7 @@ omz-clean-backups() {
 
 # Sauvegarder tous les réglages Oh My Zsh (focus sur les settings locaux)
 # usage: omz-backup-settings
-omz-backup-settings() {
+zsh-backup() {
   local _zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
   local _backup_root="$HOME/.oh-my-zsh/backups/settings"
   local _timestamp _archive _tmp_dir
@@ -245,7 +245,7 @@ omz-backup-settings() {
 
 # Restaurer une sauvegarde des réglages Oh My Zsh
 # usage: omz-restore-settings [chemin_vers_archive]
-omz-restore-settings() {
+zsh-restore() {
   local _backup_root="$HOME/.oh-my-zsh/backups/settings"
   local _archive="$1"
   local _tmp_dir _target_custom _timestamp
@@ -299,5 +299,3 @@ omz-restore-settings() {
   rm -rf "$_tmp_dir"
   echo "Restauration terminée depuis: $_archive"
 }
-
-# Ajoute les fonctions communes ici
