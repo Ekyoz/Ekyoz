@@ -201,4 +201,103 @@ omz-clean-backups() {
   fi
 }
 
+# Sauvegarder tous les réglages Oh My Zsh (focus sur les settings locaux)
+# usage: omz-backup-settings
+omz-backup-settings() {
+  local _zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+  local _backup_root="$HOME/.oh-my-zsh/backups/settings"
+  local _timestamp _archive _tmp_dir
+
+  _timestamp="$(date +%Y%m%d%H%M%S)"
+  _archive="$_backup_root/omz-settings-${_timestamp}.tar.gz"
+  mkdir -p "$_backup_root" || return 1
+  _tmp_dir="$(mktemp -d)" || return 1
+
+  if [[ -f "$HOME/.zshrc" ]]; then
+    cp "$HOME/.zshrc" "$_tmp_dir/.zshrc" || {
+      rm -rf "$_tmp_dir"
+      return 1
+    }
+  fi
+
+  if [[ -d "$_zsh_custom" ]]; then
+    mkdir -p "$_tmp_dir/custom" || {
+      rm -rf "$_tmp_dir"
+      return 1
+    }
+    cp -a "$_zsh_custom/." "$_tmp_dir/custom/" || {
+      rm -rf "$_tmp_dir"
+      return 1
+    }
+  fi
+
+  print -r -- "$_zsh_custom" > "$_tmp_dir/ZSH_CUSTOM_PATH"
+
+  if ! tar -czf "$_archive" -C "$_tmp_dir" .; then
+    rm -rf "$_tmp_dir"
+    echo "Impossible de créer la sauvegarde: $_archive"
+    return 1
+  fi
+
+  rm -rf "$_tmp_dir"
+  echo "Sauvegarde créée: $_archive"
+}
+
+# Restaurer une sauvegarde des réglages Oh My Zsh
+# usage: omz-restore-settings [chemin_vers_archive]
+omz-restore-settings() {
+  local _backup_root="$HOME/.oh-my-zsh/backups/settings"
+  local _archive="$1"
+  local _tmp_dir _target_custom _timestamp
+
+  if [[ -z "$_archive" ]]; then
+    _archive="$(ls -1t "$_backup_root"/omz-settings-*.tar.gz 2>/dev/null | head -n 1)"
+  fi
+
+  if [[ -z "$_archive" || ! -f "$_archive" ]]; then
+    echo "Aucune sauvegarde valide trouvée."
+    return 1
+  fi
+
+  _tmp_dir="$(mktemp -d)" || return 1
+  if ! tar -xzf "$_archive" -C "$_tmp_dir"; then
+    rm -rf "$_tmp_dir"
+    echo "Impossible d'extraire la sauvegarde: $_archive"
+    return 1
+  fi
+
+  _target_custom="$(cat "$_tmp_dir/ZSH_CUSTOM_PATH" 2>/dev/null)"
+  _target_custom="${_target_custom:-${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}}"
+  _timestamp="$(date +%Y%m%d%H%M%S)"
+
+  if [[ -f "$_tmp_dir/.zshrc" ]]; then
+    [[ -f "$HOME/.zshrc" ]] && cp "$HOME/.zshrc" "$HOME/.zshrc.before_restore.$_timestamp"
+    cp "$_tmp_dir/.zshrc" "$HOME/.zshrc" || {
+      rm -rf "$_tmp_dir"
+      return 1
+    }
+  fi
+
+  if [[ -d "$_tmp_dir/custom" ]]; then
+    if [[ -z "$_target_custom" || "$_target_custom" == "/" ]]; then
+      rm -rf "$_tmp_dir"
+      echo "Chemin ZSH_CUSTOM invalide."
+      return 1
+    fi
+
+    [[ -d "$_target_custom" ]] && mv "$_target_custom" "${_target_custom}.before_restore.$_timestamp"
+    mkdir -p "$_target_custom" || {
+      rm -rf "$_tmp_dir"
+      return 1
+    }
+    cp -a "$_tmp_dir/custom/." "$_target_custom/" || {
+      rm -rf "$_tmp_dir"
+      return 1
+    }
+  fi
+
+  rm -rf "$_tmp_dir"
+  echo "Restauration terminée depuis: $_archive"
+}
+
 # Ajoute les fonctions communes ici
