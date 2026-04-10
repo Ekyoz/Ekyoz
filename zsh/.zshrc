@@ -47,9 +47,15 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
 export EDITOR='vim'
 [ "$(command -v nvim)" ] && export EDITOR='nvim'
  
-# ── Custom files ──────────────────────────────────────────────────────────────
-# Chargés automatiquement par Oh My Zsh depuis $ZSH_CUSTOM/
-# → aliases.zsh, macros.zsh
+# ── Fichiers custom partagés + locaux ────────────────────────────────────────
+for _zsh_file in \
+  "$ZSH_CUSTOM/aliases/default.zsh" \
+  "$ZSH_CUSTOM/aliases/local.zsh" \
+  "$ZSH_CUSTOM/macros/default.zsh" \
+  "$ZSH_CUSTOM/macros/local.zsh"; do
+  [[ -f "$_zsh_file" ]] && source "$_zsh_file"
+done
+unset _zsh_file
 
-# ── Ovveride locaux ──────────────────────────────────────────────────────────────
+# ── Override locaux ──────────────────────────────────────────────────────────────
 [[ -f "$ZSH_CUSTOM/local.zsh" ]] && source "$ZSH_CUSTOM/local.zsh"

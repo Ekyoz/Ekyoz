@@ -1,11 +1,13 @@
 # =============================================================================
-# aliases.zsh — Aliases personnels
+# aliases/default.zsh — Aliases partagés
 # =============================================================================
 
 #------- ZSH -------#
 alias zsh-config='$EDITOR ~/.zshrc'
-alias zsh-alias='$EDITOR $ZSH_CUSTOM/aliases.zsh'
-alias zsh-macros='$EDITOR $ZSH_CUSTOM/macros.zsh'
+alias zsh-alias='$EDITOR $ZSH_CUSTOM/aliases/default.zsh'
+alias zsh-alias-local='$EDITOR $ZSH_CUSTOM/aliases/local.zsh'
+alias zsh-macros='$EDITOR $ZSH_CUSTOM/macros/default.zsh'
+alias zsh-macros-local='$EDITOR $ZSH_CUSTOM/macros/local.zsh'
 alias zsh-local='$EDITOR $ZSH_CUSTOM/local.zsh'
 alias zsh-update="curl -fsSL https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/install.sh | bash"
 
@@ -16,4 +18,4 @@ alias e='$EDITOR'
 #------ UTILITIES ------#
 alias cls='clear'
 
-# Ajoute tes aliases ici
+# Ajoute les aliases communs ici

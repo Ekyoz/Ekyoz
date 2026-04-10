@@ -94,7 +94,7 @@ ask_backup_if_different() {
 }
 
 download() {
-  local src="$1" dest="$2" optional="${3:-false}" tmp_file=""
+  local src="$1" dest="$2" optional="${3:-false}" with_backup="${4:-true}" tmp_file=""
 
   mkdir -p "$(dirname "$dest")"
   tmp_file="$(mktemp)" || error "Impossible de créer un fichier temporaire"
@@ -106,7 +106,7 @@ download() {
       return 0
     fi
 
-    ask_backup_if_different "$dest"
+    [ "$with_backup" = "true" ] && ask_backup_if_different "$dest"
     mv "$tmp_file" "$dest"
     info "$(basename "$dest") téléchargé"
     return 0
@@ -122,42 +122,54 @@ download() {
   error "Impossible de télécharger : $src"
 }
 
-download "$RAW_BASE/.zshrc" "$HOME/.zshrc"
-download "$RAW_BASE/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
+download_without_backup() {
+  local src="$1" dest="$2"
+  download "$src" "$dest" "false" "false"
+}
+
+download_if_missing() {
+  local src="$1" dest="$2"
+  if [ -f "$dest" ]; then
+    info "$(basename "$dest") déjà présent — conservé"
+    return 0
+  fi
+  download "$src" "$dest" "false" "false"
+}
+
+download_without_backup "$RAW_BASE/.zshrc" "$HOME/.zshrc"
+download "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/default.zsh"
 download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
-download "$RAW_BASE/macros.zsh" "$ZSH_CUSTOM/macros.zsh" "true"
+download "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
+
+download_if_missing "$RAW_BASE/aliases/local.zsh" "$ZSH_CUSTOM/aliases/local.zsh"
+download_if_missing "$RAW_BASE/macros/local.zsh" "$ZSH_CUSTOM/macros/local.zsh"
 
 # ── Configuration zsh ──────────────────────────────────────────────────────────
 step "Configuration zsh"
 
 # Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
 if grep -q '^export LC_TIME=' "$HOME/.zshrc"; then
-  sed -i.bak 's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc" 2>/dev/null || \
-  sed -i ''   's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc"
+  _tmp_zshrc="$(mktemp)" || error "Impossible de créer un fichier temporaire"
+  if ! sed 's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc" > "$_tmp_zshrc"; then
+    rm -f "$_tmp_zshrc"
+    error "Impossible de mettre à jour LC_TIME dans .zshrc"
+  fi
+  if ! mv "$_tmp_zshrc" "$HOME/.zshrc"; then
+    rm -f "$_tmp_zshrc"
+    error "Impossible de remplacer .zshrc"
+  fi
 else
   printf '\n# Format horaire 24h\nexport LC_TIME=fr_FR.UTF-8\n' >> "$HOME/.zshrc"
 fi
 info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
 
-# macros.zsh (template vide si absent dans le repo)
-MACROS_FILE="$ZSH_CUSTOM/macros.zsh"
-if [ ! -f "$MACROS_FILE" ]; then
-  warn "macros.zsh absent du repo — création d'un template vide"
-  cat > "$MACROS_FILE" << 'MACROS'
-# =============================================================================
-# macros.zsh — Fonctions shell personnelles
-# =============================================================================
-
-# Créer un dossier et s'y déplacer
-mkcd() { mkdir -p "$1" && cd "$1"; }
-MACROS
-fi
-
 # ── Éditeur par défaut ────────────────────────────────────────────────────────
 step "Configuration éditeur"
 LOCAL_ZSH="$ZSH_CUSTOM/local.zsh"
+MACROS_DEFAULT_FILE="$ZSH_CUSTOM/macros/default.zsh"
+MACROS_LOCAL_FILE="$ZSH_CUSTOM/macros/local.zsh"
 touch "$LOCAL_ZSH"
-zsh_editor_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; source '$MACROS_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"
+zsh_editor_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"
 
 if zsh -ic "$zsh_editor_runner"; then
   info "Configuration de l'éditeur effectuée via zsh-editor"
