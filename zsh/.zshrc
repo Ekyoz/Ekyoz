@@ -57,5 +57,5 @@ for _zsh_file in \
 done
 unset _zsh_file
 
-# ── Ovveride locaux ──────────────────────────────────────────────────────────────
+# ── Override locaux ──────────────────────────────────────────────────────────────
 [[ -f "$ZSH_CUSTOM/local.zsh" ]] && source "$ZSH_CUSTOM/local.zsh"
