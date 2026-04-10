@@ -1,5 +1,5 @@
 # =============================================================================
-# macros.zsh — Tes fonctions shell personnelles
+# macros/default.zsh — Fonctions partagées
 # =============================================================================
 
 # Créer un dossier et s'y déplacer immédiatement
@@ -201,4 +201,4 @@ omz-clean-backups() {
   fi
 }
 
-# Ajoute tes fonctions ici
+# Ajoute les fonctions communes ici
