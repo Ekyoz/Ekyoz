@@ -130,7 +130,12 @@ create_if_missing() {
   info "$(basename "$dest") créé"
 }
 
-download "$RAW_BASE/.zshrc" "$HOME/.zshrc" "false" "false"
+download_without_backup() {
+  local src="$1" dest="$2"
+  download "$src" "$dest" "false" "false"
+}
+
+download_without_backup "$RAW_BASE/.zshrc" "$HOME/.zshrc"
 download "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/default.zsh"
 download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
 download "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
@@ -153,8 +158,10 @@ step "Configuration zsh"
 # Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
 if grep -q '^export LC_TIME=' "$HOME/.zshrc"; then
   _tmp_zshrc="$(mktemp)" || error "Impossible de créer un fichier temporaire"
+  trap 'rm -f "$_tmp_zshrc"' EXIT
   sed 's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc" > "$_tmp_zshrc"
   mv "$_tmp_zshrc" "$HOME/.zshrc"
+  trap - EXIT
 else
   printf '\n# Format horaire 24h\nexport LC_TIME=fr_FR.UTF-8\n' >> "$HOME/.zshrc"
 fi
