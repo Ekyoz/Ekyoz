@@ -122,16 +122,17 @@ download() {
   error "Impossible de télécharger : $src"
 }
 
-create_if_missing() {
-  local dest="$1" template="$2"
-  [ -f "$dest" ] && return 0
-  mkdir -p "$(dirname "$dest")"
-  printf '%s\n' "$template" > "$dest"
-  info "$(basename "$dest") créé"
-}
-
 download_without_backup() {
   local src="$1" dest="$2"
+  download "$src" "$dest" "false" "false"
+}
+
+download_if_missing() {
+  local src="$1" dest="$2"
+  if [ -f "$dest" ]; then
+    info "$(basename "$dest") déjà présent — conservé"
+    return 0
+  fi
   download "$src" "$dest" "false" "false"
 }
 
@@ -140,17 +141,8 @@ download "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/default.zsh"
 download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
 download "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
 
-create_if_missing "$ZSH_CUSTOM/aliases/local.zsh" "# =============================================================================
-# aliases/local.zsh — Aliases spécifiques à cette machine
-# =============================================================================
-
-# Ajoute ici les aliases locaux (non partagés)"
-
-create_if_missing "$ZSH_CUSTOM/macros/local.zsh" "# =============================================================================
-# macros/local.zsh — Fonctions spécifiques à cette machine
-# =============================================================================
-
-# Ajoute ici les fonctions locales (non partagées)"
+download_if_missing "$RAW_BASE/aliases/local.zsh" "$ZSH_CUSTOM/aliases/local.zsh"
+download_if_missing "$RAW_BASE/macros/local.zsh" "$ZSH_CUSTOM/macros/local.zsh"
 
 # ── Configuration zsh ──────────────────────────────────────────────────────────
 step "Configuration zsh"
