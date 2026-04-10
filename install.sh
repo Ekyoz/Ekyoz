@@ -137,9 +137,9 @@ download_if_missing() {
 }
 
 download_without_backup "$RAW_BASE/.zshrc" "$HOME/.zshrc"
-download "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/default.zsh"
+download_without_backup "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/default.zsh"
 download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
-download "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
+download_without_backup "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
 
 download_if_missing "$RAW_BASE/aliases/local.zsh" "$ZSH_CUSTOM/aliases/local.zsh"
 download_if_missing "$RAW_BASE/macros/local.zsh" "$ZSH_CUSTOM/macros/local.zsh"
@@ -170,8 +170,12 @@ MACROS_DEFAULT_FILE="$ZSH_CUSTOM/macros/default.zsh"
 MACROS_LOCAL_FILE="$ZSH_CUSTOM/macros/local.zsh"
 touch "$LOCAL_ZSH"
 zsh_editor_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"
+zsh_editor_check_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; [ -f '$LOCAL_ZSH' ] && source '$LOCAL_ZSH'; print -r -- \"\${EDITOR%% *}\""
 
-if zsh -ic "$zsh_editor_runner"; then
+current_editor="$(zsh -ic "$zsh_editor_check_runner" 2>/dev/null | tail -n 1)"
+if [ -n "$current_editor" ] && command -v "$current_editor" >/dev/null 2>&1; then
+  info "Éditeur déjà configuré : $current_editor — skip"
+elif zsh -ic "$zsh_editor_runner"; then
   info "Configuration de l'éditeur effectuée via zsh-editor"
 else
   warn "Impossible d'exécuter zsh-editor, fallback sur vim"
