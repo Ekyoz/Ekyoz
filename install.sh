@@ -128,9 +128,9 @@ download_without_backup() {
 }
 
 download_if_missing() {
-  local src="$1" dest="$2"
+  local src="$1" dest="$2" label="${3:-$(basename "$dest")}"
   if [ -f "$dest" ]; then
-    info "$(basename "$dest") déjà présent — conservé"
+    info "$label déjà présent — conservé"
     return 0
   fi
   download "$src" "$dest" "false" "false"
@@ -141,8 +141,9 @@ download_without_backup "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/def
 download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
 download_without_backup "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
 
-download_if_missing "$RAW_BASE/aliases/local.zsh" "$ZSH_CUSTOM/aliases/local.zsh"
-download_if_missing "$RAW_BASE/macros/local.zsh" "$ZSH_CUSTOM/macros/local.zsh"
+download_if_missing "$RAW_BASE/aliases/local.zsh" "$ZSH_CUSTOM/aliases/local.zsh" "aliases/local.zsh"
+download_if_missing "$RAW_BASE/macros/local.zsh" "$ZSH_CUSTOM/macros/local.zsh" "macros/local.zsh"
+download_if_missing "$RAW_BASE/export.zsh" "$ZSH_CUSTOM/export.zsh" "export.zsh"
 
 # ── Configuration zsh ──────────────────────────────────────────────────────────
 step "Configuration zsh"
@@ -168,7 +169,6 @@ step "Configuration éditeur"
 EXPORT_ZSH="$ZSH_CUSTOM/export.zsh"
 MACROS_DEFAULT_FILE="$ZSH_CUSTOM/macros/default.zsh"
 MACROS_LOCAL_FILE="$ZSH_CUSTOM/macros/local.zsh"
-touch "$EXPORT_ZSH"
 zsh_editor_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"
 zsh_editor_check_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; [ -f '$EXPORT_ZSH' ] && source '$EXPORT_ZSH'; print -r -- \"\${EDITOR%% *}\""
 
