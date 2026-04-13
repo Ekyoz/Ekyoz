@@ -5,7 +5,11 @@ if [[ -n "${HOST_VALUE}" ]]; then
 fi
 
 if [[ -n "${SSH_CONNECTION:-}${SSH_CLIENT:-}${SSH_TTY:-}" ]]; then
-  SSH_SEGMENT="%{${fg_bold[blue]}%}(%{${fg[blue]}%}SSH%{${fg_bold[blue]}%})"
+  if [[ -n "${DISPLAY:-}" ]]; then
+    SSH_SEGMENT="%{${fg_bold[blue]}%}(%{${fg[blue]}%}SSH+X11%{${fg_bold[blue]}%})"
+  else
+    SSH_SEGMENT="%{${fg_bold[blue]}%}(%{${fg[blue]}%}SSH%{${fg_bold[blue]}%})"
+  fi
 else
   SSH_SEGMENT=""
 fi
