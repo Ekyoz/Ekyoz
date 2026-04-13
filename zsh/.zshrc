@@ -58,4 +58,4 @@ done
 unset _zsh_file
 
 # ── Override locaux ──────────────────────────────────────────────────────────────
-[[ -f "$ZSH_CUSTOM/local.zsh" ]] && source "$ZSH_CUSTOM/local.zsh"
+[[ -f "$ZSH_CUSTOM/export.zsh" ]] && source "$ZSH_CUSTOM/export.zsh"

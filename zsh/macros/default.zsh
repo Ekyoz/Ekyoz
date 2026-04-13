@@ -9,7 +9,7 @@ mkcd() {
 
 # Changer l'éditeur par défaut avec détection dynamique
 zsh-editor() {
-  local _local_file="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/local.zsh"
+  local _local_file="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/export.zsh"
   local -a _editors
   local -A _seen
   local _cmd _line _desktop _desktop_file _exec _choice _editor _tmp
