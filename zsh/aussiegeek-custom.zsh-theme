@@ -4,8 +4,14 @@ if [[ -n "${HOST_VALUE}" ]]; then
   HOST_SEGMENT="%{${fg[red]}%}%m"
 fi
 
+if [[ -n "${SSH_CONNECTION:-}${SSH_CLIENT:-}${SSH_TTY:-}" ]]; then
+  SSH_INDICATOR="SSH"
+else
+  SSH_INDICATOR="LOCAL"
+fi
+
 PROMPT_TIME="%{${fg_bold[blue]}%}[%F{242}%T%f%{${fg_bold[blue]}%}]"
-PROMPT_USER_HOST_PATH="%{${fg_bold[blue]}%} [%{${fg[red]}%}%n@%m%{${fg_bold[blue]}%}] [%{${fg[red]}%}%~\$(git_prompt_info)%{${fg[yellow]}%}\$(ruby_prompt_info)%{${fg_bold[blue]}%}]%{$reset_color%}
+PROMPT_USER_HOST_PATH="%{${fg_bold[blue]}%} [%{${fg[red]}%}%n@%m%{${fg_bold[blue]}%}(%{${fg[blue]}%}${SSH_INDICATOR}%{${fg_bold[blue]}%})] [%{${fg[red]}%}%~\$(git_prompt_info)%{${fg[yellow]}%}\$(ruby_prompt_info)%{${fg_bold[blue]}%}]%{$reset_color%}
  $ "
 PROMPT="${PROMPT_TIME}${PROMPT_USER_HOST_PATH}%{$reset_color%}"
 
