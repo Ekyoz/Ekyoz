@@ -165,12 +165,12 @@ info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
 
 # ── Éditeur par défaut ────────────────────────────────────────────────────────
 step "Configuration éditeur"
-LOCAL_ZSH="$ZSH_CUSTOM/local.zsh"
+EXPORT_ZSH="$ZSH_CUSTOM/export.zsh"
 MACROS_DEFAULT_FILE="$ZSH_CUSTOM/macros/default.zsh"
 MACROS_LOCAL_FILE="$ZSH_CUSTOM/macros/local.zsh"
-touch "$LOCAL_ZSH"
+touch "$EXPORT_ZSH"
 zsh_editor_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; typeset -f zsh-editor >/dev/null && zsh-editor"
-zsh_editor_check_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; [ -f '$LOCAL_ZSH' ] && source '$LOCAL_ZSH'; print -r -- \"\${EDITOR%% *}\""
+zsh_editor_check_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_FILE' ] && source '$MACROS_DEFAULT_FILE'; [ -f '$MACROS_LOCAL_FILE' ] && source '$MACROS_LOCAL_FILE'; [ -f '$EXPORT_ZSH' ] && source '$EXPORT_ZSH'; print -r -- \"\${EDITOR%% *}\""
 
 current_editor="$(zsh -ic "$zsh_editor_check_runner" 2>/dev/null | tail -n 1)"
 if [ -n "$current_editor" ] && command -v "$current_editor" >/dev/null 2>&1; then
@@ -179,9 +179,9 @@ elif zsh -ic "$zsh_editor_runner"; then
   info "Configuration de l'éditeur effectuée via zsh-editor"
 else
   warn "Impossible d'exécuter zsh-editor, fallback sur vim"
-  _tmp="$(grep -v '^export EDITOR=' "$LOCAL_ZSH" 2>/dev/null || true)"
-  printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "vim" > "$LOCAL_ZSH"
-  info "EDITOR='vim' enregistré dans $LOCAL_ZSH"
+  _tmp="$(grep -v '^export EDITOR=' "$EXPORT_ZSH" 2>/dev/null || true)"
+  printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "vim" > "$EXPORT_ZSH"
+  info "EDITOR='vim' enregistré dans $EXPORT_ZSH"
 fi
 
 # ── Shell par défaut ──────────────────────────────────────────────────────────
