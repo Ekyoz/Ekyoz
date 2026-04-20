@@ -14,10 +14,17 @@ else
   SSH_SEGMENT=""
 fi
 
+python_venv_prompt_info() {
+  if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+    echo "%{${fg_bold[blue]}%}[%{${fg[white]}%}$(basename "${VIRTUAL_ENV}")%{${fg_bold[blue]}%}]"
+  fi
+}
+
 PROMPT_TIME="%{${fg_bold[blue]}%}[%F{242}%T%f%{${fg_bold[blue]}%}]"
 PROMPT_USER_HOST="%{${fg_bold[blue]}%} [%{${fg[red]}%}%n@%m${SSH_SEGMENT}%{${fg_bold[blue]}%}]"
 PROMPT_PATH_INFO="%{${fg_bold[blue]}%} [%{${fg[red]}%}%~\$(git_prompt_info)%{${fg[yellow]}%}\$(ruby_prompt_info)%{${fg_bold[blue]}%}]"
-PROMPT_USER_HOST_PATH="${PROMPT_USER_HOST}${PROMPT_PATH_INFO}%{$reset_color%}"
+PROMPT_VENV="\$(python_venv_prompt_info)"
+PROMPT_USER_HOST_PATH="${PROMPT_USER_HOST}${PROMPT_PATH_INFO}${PROMPT_VENV}%{$reset_color%}"
 PROMPT="${PROMPT_TIME}${PROMPT_USER_HOST_PATH}%{$reset_color%}
  $ "
 
