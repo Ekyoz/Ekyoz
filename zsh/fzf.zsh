@@ -99,7 +99,7 @@ fzf-file-widget-smart() {
   local buf_before="$BUFFER"
   zle fzf-file-widget
   if [[ -z "$buf_before" && -n "$LBUFFER" ]]; then
-    local file="${LBUFFER# }"
+    local file="${${LBUFFER## }%% }"
     BUFFER=""
     zle -I
     ${=EDITOR:-vim} "$file" </dev/tty
