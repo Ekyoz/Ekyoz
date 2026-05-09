@@ -57,6 +57,7 @@ export FZF_DEFAULT_OPTS="
 
 _fzf_flag_f='/tmp/fzf_hidden_files'
 _fzf_flag_d='/tmp/fzf_hidden_dirs'
+rm -f "$_fzf_flag_f" "$_fzf_flag_d"
 
 # ── CTRL+F → fichiers | CTRL+H : cachés ON | ALT+MAJ+H : cachés OFF ───────────
 export FZF_CTRL_T_OPTS="
