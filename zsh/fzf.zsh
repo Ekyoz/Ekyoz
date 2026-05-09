@@ -87,15 +87,14 @@ export FZF_CTRL_R_OPTS="
 
 # ── Widget CTRL+F custom ──────────────────────────────────────────────────────
 fzf-file-widget-smart() {
-  local file
-  file="$(eval "$FZF_CTRL_T_COMMAND" | fzf ${=FZF_CTRL_T_OPTS})"
-  [ -z "$file" ] && zle redisplay && return
-
-  if [ -z "$BUFFER" ]; then
-    ${EDITOR:-vim} "$file"
+  local buf_before="$BUFFER"
+  zle fzf-file-widget
+  if [[ -z "$buf_before" && -n "$LBUFFER" ]]; then
+    local file="${LBUFFER# }"
+    BUFFER=""
     zle reset-prompt
-  else
-    LBUFFER+="$file"
+    ${=EDITOR} "$file"
+    zle reset-prompt
   fi
 }
 zle -N fzf-file-widget-smart
