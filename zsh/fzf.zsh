@@ -75,7 +75,7 @@ export FZF_CTRL_T_OPTS="
 export FZF_ALT_C_OPTS="
   --preview '$_fzf_preview_dir'
   --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF'
-  --bind='alt-h:transform:
+  --bind='ctrl-h:transform:
     if [ -f $_fzf_flag_d ]; then
       rm -f $_fzf_flag_d
       echo \"reload($_fzf_dirs)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF)\"
