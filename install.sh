@@ -73,6 +73,21 @@ else
   info "fzf installé"
 fi
 
+# ── fd ────────────────────────────────────────────────────────────────────────
+step "fd (find amélioré)"
+if command -v fd &>/dev/null; then
+  warn "fd déjà installé — skip"
+elif sudo -n true 2>/dev/null; then
+  info "Installation de fd..."
+  if [ "$PLATFORM" = "macos" ]; then
+    brew install fd >/dev/null 2>&1 && info "fd installé" || warn "Échec installation fd"
+  else
+    apt-get install -y fd-find >/dev/null 2>&1 && info "fd installé" || warn "Échec installation fd"
+  fi
+else
+  warn "fd non installé et pas de droits sudo — skip"
+fi
+
 # ── Téléchargement des fichiers zsh ───────────────────────────────────────────
 step "Téléchargement des fichiers zsh"
 
