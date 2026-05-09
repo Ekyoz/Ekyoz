@@ -18,17 +18,12 @@ else
   _fzf_dirs_h='find . -type d -not -path "*/.git/*"'
 fi
 
-# FZF_CTRL_T_COMMAND → utilisé par fzf-file-widget (CTRL+F)
-# FZF_ALT_C_COMMAND  → utilisé par fzf-cd-widget    (CTRL+T)
 export FZF_DEFAULT_COMMAND="$_fzf_files"
 export FZF_CTRL_T_COMMAND="$_fzf_files"
 export FZF_ALT_C_COMMAND="$_fzf_dirs"
 
 # ── Preview ───────────────────────────────────────────────────────────────────
-_fzf_bin_dir="$(dirname "$(command -v fzf)")"
-if [ -f "$_fzf_bin_dir/fzf-preview.sh" ]; then
-  _fzf_preview_file="$_fzf_bin_dir/fzf-preview.sh {}"
-elif command -v bat &>/dev/null; then
+if command -v bat &>/dev/null; then
   _fzf_preview_file='bat --color=always --style=numbers --line-range=:200 {}'
 else
   _fzf_preview_file='cat {}'
@@ -42,7 +37,6 @@ fi
 
 # ── Options globales ──────────────────────────────────────────────────────────
 export FZF_DEFAULT_OPTS="
-  --style=full
   --height=60%
   --layout=reverse
   --border=rounded
@@ -54,26 +48,39 @@ export FZF_DEFAULT_OPTS="
   --bind='ctrl-/:toggle-preview'
   --bind='ctrl-u:preview-half-page-up'
   --bind='ctrl-d:preview-half-page-down'
-  --color=fg:#cdd6f4,fg+:#cdd6f4,bg:-1,bg+:-1
-  --color=hl:#89b4fa,hl+:#89dceb,info:#cba6f7,prompt:#89b4fa
-  --color=pointer:#f38ba8,marker:#a6e3a1,spinner:#f5c2e7,border:#6c7086
+  --color=fg:-1,fg+:2,bg:-1,bg+:-1
+  --color=hl:4,hl+:6,info:3,prompt:4
+  --color=pointer:1,marker:2,spinner:3,border:4,header:1
 "
 
-# ── CTRL+F → fichiers | ALT+H toggle cachés ───────────────────────────────────
+# ── CTRL+F → fichiers | ALT+H toggle cachés ──────────────────────────────────
+_fzf_hidden_flag_f='/tmp/fzf_hidden_files'
 export FZF_CTRL_T_OPTS="
   --preview '$_fzf_preview_file'
-  --bind='focus:transform-header:file --brief {} 2>/dev/null || echo {}'
-  --bind='alt-h:transform:[[ \$FZF_PROMPT == *\"[+H]\"* ]] \
-    && echo \"reload($_fzf_files)+change-prompt(fichiers ❯ )\" \
-    || echo \"reload($_fzf_files_h)+change-prompt(fichiers [+H] ❯ )\"'
+  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
+  --bind='alt-h:transform:
+    if [ -f $_fzf_hidden_flag_f ]; then
+      rm -f $_fzf_hidden_flag_f
+      echo \"reload($_fzf_files)+change-prompt(fichiers ❯ )\"
+    else
+      touch $_fzf_hidden_flag_f
+      echo \"reload($_fzf_files_h)+change-prompt(fichiers [+H] ❯ )\"
+    fi'
 "
 
 # ── CTRL+T → dossiers | ALT+H toggle cachés ──────────────────────────────────
+_fzf_hidden_flag_d='/tmp/fzf_hidden_dirs'
 export FZF_ALT_C_OPTS="
   --preview '$_fzf_preview_dir'
-  --bind='alt-h:transform:[[ \$FZF_PROMPT == *\"[+H]\"* ]] \
-    && echo \"reload($_fzf_dirs)+change-prompt(dossiers ❯ )\" \
-    || echo \"reload($_fzf_dirs_h)+change-prompt(dossiers [+H] ❯ )\"'
+  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
+  --bind='alt-h:transform:
+    if [ -f $_fzf_hidden_flag_d ]; then
+      rm -f $_fzf_hidden_flag_d
+      echo \"reload($_fzf_dirs)+change-prompt(dossiers ❯ )\"
+    else
+      touch $_fzf_hidden_flag_d
+      echo \"reload($_fzf_dirs_h)+change-prompt(dossiers [+H] ❯ )\"
+    fi'
 "
 
 # ── CTRL+R → historique ───────────────────────────────────────────────────────
@@ -83,10 +90,11 @@ export FZF_CTRL_R_OPTS="
   --header='CTRL+/ : toggle preview'
 "
 
-# ── Remapping (après chargement des widgets fzf) ──────────────────────────────
-bindkey '^F' fzf-file-widget   # CTRL+F → fichiers
-bindkey '^T' fzf-cd-widget     # CTRL+T → dossiers
-bindkey -r '^[c' 2>/dev/null   # supprime ALT+C
+# ── Remapping ─────────────────────────────────────────────────────────────────
+bindkey '^F' fzf-file-widget
+bindkey '^T' fzf-cd-widget
+bindkey -r '^[c' 2>/dev/null
 
 unset _fzf_files _fzf_files_h _fzf_dirs _fzf_dirs_h
-unset _fzf_preview_file _fzf_preview_dir _fzf_bin_dir
+unset _fzf_preview_file _fzf_preview_dir
+unset _fzf_hidden_flag_f _fzf_hidden_flag_d
