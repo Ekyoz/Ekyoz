@@ -79,7 +79,7 @@ _has_sudo() {
 }
 
 step "fd (find amélioré)"
-if command -v fd &>/dev/null; then
+if command -v fdfind &>/dev/null; then
   warn "fd déjà installé — skip"
 elif _has_sudo; then
   info "Installation de fd..."
