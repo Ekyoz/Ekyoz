@@ -58,17 +58,25 @@ export FZF_DEFAULT_OPTS="
 # ── CTRL+F → fichiers | ALT+H : cachés ON | ALT+MAJ+H : cachés OFF ───────────
 export FZF_CTRL_T_OPTS="
   --preview '$_fzf_preview_file'
-  --header='CTRL+/ : preview  |  ALT+H : show hidden  |  ALT+MAJ+H : hide'
-  --bind='alt-h:reload($( echo $_fzf_files_h ))'
-  --bind='alt-H:reload($( echo $_fzf_files ))'
+  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
+  --bind='alt-h:transform:
+    if [[ \$FZF_PROMPT == *\"[+H]\"* ]]; then
+      echo \"reload($_fzf_files)+change-prompt(fichiers ❯ )\"
+    else
+      echo \"reload($_fzf_files_h)+change-prompt(fichiers [+H] ❯ )\"
+    fi'
 "
 
 # ── CTRL+T → dossiers | ALT+H : cachés ON | ALT+MAJ+H : cachés OFF ──────────
 export FZF_ALT_C_OPTS="
   --preview '$_fzf_preview_dir'
-  --header='CTRL+/ : preview  |  ALT+H : show hidden  |  ALT+MAJ+H : hide'
-  --bind='alt-h:reload($( echo $_fzf_dirs_h ))'
-  --bind='alt-H:reload($( echo $_fzf_dirs ))'
+  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
+  --bind='alt-h:transform:
+    if [[ \$FZF_PROMPT == *\"[+H]\"* ]]; then
+      echo \"reload($_fzf_dirs)+change-prompt(dossiers ❯ )\"
+    else
+      echo \"reload($_fzf_dirs_h)+change-prompt(dossiers [+H] ❯ )\"
+    fi'
 "
 
 # ── CTRL+R → historique ───────────────────────────────────────────────────────
