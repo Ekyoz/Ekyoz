@@ -62,6 +62,7 @@ clone_plugin() {
 
 clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosuggestions"
 clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
+clone_plugin "fzf-zsh-plugin" "https://github.com/unixorn/fzf-zsh-plugin.git"
 
 # ── Téléchargement des fichiers zsh ───────────────────────────────────────────
 step "Téléchargement des fichiers zsh"
