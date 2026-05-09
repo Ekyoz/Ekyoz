@@ -2,28 +2,40 @@
 # fzf.zsh — Configuration fzf
 # =============================================================================
 
-# ── Binaire ──────────────────────────────────────────────────────────────────
+# ── Binaire ───────────────────────────────────────────────────────────────────
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
-# ── Commande de recherche (fd si dispo, sinon find) ───────────────────────────
+# ── Commandes de base (sans fichiers cachés par défaut) ───────────────────────
 if command -v fd &>/dev/null; then
-  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-  export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  _fzf_cmd_files='fd --type f --follow --exclude .git'
+  _fzf_cmd_files_hidden='fd --type f --hidden --follow --exclude .git'
+  _fzf_cmd_dirs='fd --type d --follow --exclude .git'
+  _fzf_cmd_dirs_hidden='fd --type d --hidden --follow --exclude .git'
 else
-  export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/.git/*"'
-  export FZF_ALT_C_COMMAND='find . -type d -not -path "*/.git/*"'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  _fzf_cmd_files='find . -type f -not -path "*/.git/*" -not -name ".*"'
+  _fzf_cmd_files_hidden='find . -type f -not -path "*/.git/*"'
+  _fzf_cmd_dirs='find . -type d -not -path "*/.git/*" -not -name ".*"'
+  _fzf_cmd_dirs_hidden='find . -type d -not -path "*/.git/*"'
 fi
 
-# ── Preview (bat si dispo, sinon cat) ────────────────────────────────────────
+export FZF_DEFAULT_COMMAND="$_fzf_cmd_files"
+export FZF_CTRL_T_COMMAND="$_fzf_cmd_dirs"   # CTRL+T → dossiers
+export FZF_ALT_C_COMMAND="$_fzf_cmd_dirs"
+
+# ── Preview ───────────────────────────────────────────────────────────────────
 if command -v bat &>/dev/null; then
   _fzf_preview_file='bat --color=always --style=numbers --line-range=:200 {}'
 else
   _fzf_preview_file='cat {}'
 fi
 
-# ── Options globales ──────────────────────────────────────────────────────────
+if command -v tree &>/dev/null; then
+  _fzf_preview_dir='tree -C -L 2 {}'
+else
+  _fzf_preview_dir='ls -la --color=always {}'
+fi
+
+# ── Options globales (bg:-1 = fond transparent) ───────────────────────────────
 export FZF_DEFAULT_OPTS="
   --height 60%
   --layout=reverse
@@ -36,29 +48,40 @@ export FZF_DEFAULT_OPTS="
   --bind='ctrl-/:toggle-preview'
   --bind='ctrl-u:preview-half-page-up'
   --bind='ctrl-d:preview-half-page-down'
-  --color=fg:#cdd6f4,fg+:#cdd6f4,bg:#1e1e2e,bg+:#313244
+  --color=fg:#cdd6f4,fg+:#cdd6f4,bg:-1,bg+:-1
   --color=hl:#89b4fa,hl+:#89dceb,info:#cba6f7,prompt:#89b4fa
   --color=pointer:#f38ba8,marker:#a6e3a1,spinner:#f5c2e7,border:#6c7086
 "
 
-# ── CTRL+T  : fichiers avec preview ──────────────────────────────────────────
+# ── CTRL+F → fichiers (avec toggle hidden via ALT+H) ─────────────────────────
 export FZF_CTRL_T_OPTS="
   --preview '$_fzf_preview_file'
-  --header='CTRL+/ : toggle preview'
+  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
+  --bind='alt-h:reload($_fzf_cmd_files_hidden)'
+  --bind='alt-H:reload($_fzf_cmd_files)'
 "
 
-# ── ALT+C  : dossiers avec preview (tree si dispo) ───────────────────────────
-if command -v tree &>/dev/null; then
-  export FZF_ALT_C_OPTS="--preview 'tree -C -L 2 {}'"
-else
-  export FZF_ALT_C_OPTS="--preview 'ls -la --color=always {}'"
-fi
+# ── CTRL+T → dossiers (avec toggle hidden via ALT+H) ─────────────────────────
+export FZF_ALT_C_OPTS="
+  --preview '$_fzf_preview_dir'
+  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
+  --bind='alt-h:reload($_fzf_cmd_dirs_hidden)'
+  --bind='alt-H:reload($_fzf_cmd_dirs)'
+"
 
-# ── CTRL+R  : historique avec preview de la commande complète ────────────────
+# ── CTRL+R → historique ───────────────────────────────────────────────────────
 export FZF_CTRL_R_OPTS="
   --preview 'echo {}'
   --preview-window=down:3:wrap
   --header='CTRL+/ : toggle preview'
 "
 
-unset _fzf_preview_file
+# ── Remapping des touches (après chargement des widgets fzf) ──────────────────
+# CTRL+F → fichiers  (ancien CTRL+T)
+# CTRL+T → dossiers  (ancien ALT+C)
+bindkey '^F' fzf-file-widget
+bindkey '^T' fzf-cd-widget
+bindkey -r '^[c' 2>/dev/null  # supprime ALT+C
+
+unset _fzf_cmd_files _fzf_cmd_files_hidden _fzf_cmd_dirs _fzf_cmd_dirs_hidden
+unset _fzf_preview_file _fzf_preview_dir
