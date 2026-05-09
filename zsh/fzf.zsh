@@ -5,7 +5,7 @@
 # ── Binaire ───────────────────────────────────────────────────────────────────
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
-# ── Commandes (sans cachés par défaut) ────────────────────────────────────────
+# ── Commandes ─────────────────────────────────────────────────────────────────
 if command -v fd &>/dev/null; then
   _fzf_files='fd --type f --follow --exclude .git'
   _fzf_files_h='fd --type f --hidden --follow --exclude .git'
@@ -36,6 +36,8 @@ else
 fi
 
 # ── Options globales ──────────────────────────────────────────────────────────
+# Couleurs : bordures/layout terminal par défaut, éléments dans le style aussiegeek
+# rouge=pointer, bleu=hl/prompt, vert=marker, jaune=info
 export FZF_DEFAULT_OPTS="
   --height=60%
   --layout=reverse
@@ -48,39 +50,25 @@ export FZF_DEFAULT_OPTS="
   --bind='ctrl-/:toggle-preview'
   --bind='ctrl-u:preview-half-page-up'
   --bind='ctrl-d:preview-half-page-down'
-  --color=fg:-1,fg+:2,bg:-1,bg+:-1
-  --color=hl:4,hl+:6,info:3,prompt:4
-  --color=pointer:1,marker:2,spinner:3,border:4,header:1
+  --color=bg:-1,bg+:-1,fg:-1,fg+:-1,border:-1
+  --color=hl:4,hl+:4,info:3,prompt:4
+  --color=pointer:1,marker:2,spinner:3,header:1
 "
 
-# ── CTRL+F → fichiers | ALT+H toggle cachés ──────────────────────────────────
-_fzf_hidden_flag_f='/tmp/fzf_hidden_files'
+# ── CTRL+F → fichiers | ALT+H : cachés ON | ALT+MAJ+H : cachés OFF ───────────
 export FZF_CTRL_T_OPTS="
   --preview '$_fzf_preview_file'
-  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
-  --bind='alt-h:transform:
-    if [ -f $_fzf_hidden_flag_f ]; then
-      rm -f $_fzf_hidden_flag_f
-      echo \"reload($_fzf_files)+change-prompt(fichiers ❯ )\"
-    else
-      touch $_fzf_hidden_flag_f
-      echo \"reload($_fzf_files_h)+change-prompt(fichiers [+H] ❯ )\"
-    fi'
+  --header='CTRL+/ : preview  |  ALT+H : show hidden  |  ALT+MAJ+H : hide'
+  --bind='alt-h:reload($( echo $_fzf_files_h ))'
+  --bind='alt-H:reload($( echo $_fzf_files ))'
 "
 
-# ── CTRL+T → dossiers | ALT+H toggle cachés ──────────────────────────────────
-_fzf_hidden_flag_d='/tmp/fzf_hidden_dirs'
+# ── CTRL+T → dossiers | ALT+H : cachés ON | ALT+MAJ+H : cachés OFF ──────────
 export FZF_ALT_C_OPTS="
   --preview '$_fzf_preview_dir'
-  --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
-  --bind='alt-h:transform:
-    if [ -f $_fzf_hidden_flag_d ]; then
-      rm -f $_fzf_hidden_flag_d
-      echo \"reload($_fzf_dirs)+change-prompt(dossiers ❯ )\"
-    else
-      touch $_fzf_hidden_flag_d
-      echo \"reload($_fzf_dirs_h)+change-prompt(dossiers [+H] ❯ )\"
-    fi'
+  --header='CTRL+/ : preview  |  ALT+H : show hidden  |  ALT+MAJ+H : hide'
+  --bind='alt-h:reload($( echo $_fzf_dirs_h ))'
+  --bind='alt-H:reload($( echo $_fzf_dirs ))'
 "
 
 # ── CTRL+R → historique ───────────────────────────────────────────────────────
@@ -97,4 +85,3 @@ bindkey -r '^[c' 2>/dev/null
 
 unset _fzf_files _fzf_files_h _fzf_dirs _fzf_dirs_h
 unset _fzf_preview_file _fzf_preview_dir
-unset _fzf_hidden_flag_f _fzf_hidden_flag_d
