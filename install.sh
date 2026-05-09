@@ -62,7 +62,16 @@ clone_plugin() {
 
 clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosuggestions"
 clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
-clone_plugin "fzf-zsh-plugin" "https://github.com/unixorn/fzf-zsh-plugin.git"
+
+# ── fzf ───────────────────────────────────────────────────────────────────────
+if [ -d "$HOME/.fzf" ]; then
+  warn "fzf déjà installé — skip"
+else
+  info "Installation de fzf..."
+  git clone --depth=1 -q https://github.com/junegunn/fzf.git "$HOME/.fzf"
+  "$HOME/.fzf/install" --all --no-bash --no-fish --no-update-rc >/dev/null 2>&1
+  info "fzf installé"
+fi
 
 # ── Téléchargement des fichiers zsh ───────────────────────────────────────────
 step "Téléchargement des fichiers zsh"

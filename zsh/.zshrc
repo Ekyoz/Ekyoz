@@ -14,10 +14,10 @@ plugins=(
   pip
   sudo
   z
+  fzf
   history-substring-search
   zsh-autosuggestions
   zsh-syntax-highlighting
-  fzf-zsh-plugin
 )
  
 source $ZSH/oh-my-zsh.sh
