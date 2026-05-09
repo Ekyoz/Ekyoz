@@ -150,6 +150,7 @@ download_without_backup "$RAW_BASE/.zshrc" "$HOME/.zshrc"
 download_without_backup "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/default.zsh"
 download_without_backup "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
 download_without_backup "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
+download_without_backup "$RAW_BASE/fzf.zsh" "$ZSH_CUSTOM/fzf.zsh"
 
 download_if_missing "$RAW_BASE/aliases/local.zsh" "$ZSH_CUSTOM/aliases/local.zsh" "aliases/local.zsh"
 download_if_missing "$RAW_BASE/macros/local.zsh" "$ZSH_CUSTOM/macros/local.zsh" "macros/local.zsh"

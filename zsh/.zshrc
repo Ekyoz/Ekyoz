@@ -50,6 +50,7 @@ export EDITOR='vim'
  
 # ── Fichiers custom partagés + locaux ────────────────────────────────────────
 for _zsh_file in \
+  "$ZSH_CUSTOM/fzf.zsh" \
   "$ZSH_CUSTOM/aliases/default.zsh" \
   "$ZSH_CUSTOM/aliases/local.zsh" \
   "$ZSH_CUSTOM/macros/default.zsh" \
