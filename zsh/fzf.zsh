@@ -12,9 +12,9 @@ if command -v fd &>/dev/null; then
   _fzf_dirs='fd --type d --follow --exclude .git'
   _fzf_dirs_h='fd --type d --hidden --follow --exclude .git'
 else
-  _fzf_files='find . -type f -not -path "*/.git/*" -not -path "*/.*"'
+  _fzf_files='find . \( -name ".*" -prune \) -o \( -type f -not -path "*/.git/*" -print \)'
   _fzf_files_h='find . -type f -not -path "*/.git/*"'
-  _fzf_dirs='find . -type d -not -path "*/.git/*" -not -path "*/.*"'
+  _fzf_dirs='find . \( -name ".*" -prune \) -o \( -type d -not -path "*/.git/*" -print \)'
   _fzf_dirs_h='find . -type d -not -path "*/.git/*"'
 fi
 
