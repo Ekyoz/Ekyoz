@@ -6,11 +6,11 @@
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 # ── Commandes ─────────────────────────────────────────────────────────────────
-if command -v fd &>/dev/null; then
-  _fzf_files='fd --type f --follow --exclude .git'
-  _fzf_files_h='fd --type f --hidden --follow --exclude .git'
-  _fzf_dirs='fd --type d --follow --exclude .git'
-  _fzf_dirs_h='fd --type d --hidden --follow --exclude .git'
+if command -v fdfind &>/dev/null; then
+  _fzf_files='fdfind --type f --follow --exclude .git'
+  _fzf_files_h='fdfind --type f --hidden --follow --exclude .git'
+  _fzf_dirs='fdfind --type d --follow --exclude .git'
+  _fzf_dirs_h='fdfind --type d --hidden --follow --exclude .git'
 else
   _fzf_files='find . -mindepth 1 -name ".*" -prune -o -type f -not -path "*/.git/*" -print'
   _fzf_files_h='find . -type f -not -path "*/.git/*"'
