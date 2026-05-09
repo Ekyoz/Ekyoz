@@ -74,15 +74,19 @@ else
 fi
 
 # ── fd ────────────────────────────────────────────────────────────────────────
+_has_sudo() {
+  groups | tr ' ' '\n' | grep -qE '^(sudo|wheel|admin)$'
+}
+
 step "fd (find amélioré)"
 if command -v fd &>/dev/null; then
   warn "fd déjà installé — skip"
-elif sudo -n true 2>/dev/null; then
+elif _has_sudo; then
   info "Installation de fd..."
   if [ "$PLATFORM" = "macos" ]; then
     brew install fd >/dev/null 2>&1 && info "fd installé" || warn "Échec installation fd"
   else
-    apt-get install -y fd-find >/dev/null 2>&1 && info "fd installé" || warn "Échec installation fd"
+    sudo apt-get install -y fd-find >/dev/null 2>&1 && info "fd installé" || warn "Échec installation fd"
   fi
 else
   warn "fd non installé et pas de droits sudo — skip"
