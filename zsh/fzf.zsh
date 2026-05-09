@@ -101,8 +101,9 @@ fzf-file-widget-smart() {
   if [[ -z "$buf_before" && -n "$LBUFFER" ]]; then
     local file="${LBUFFER# }"
     BUFFER=""
-    print -z "${EDITOR:-vim} ${(q)file}"
-    zle accept-line
+    zle -I
+    ${=EDITOR:-vim} "$file" </dev/tty
+    zle reset-prompt
   fi
 }
 zle -N fzf-file-widget-smart
