@@ -102,6 +102,7 @@ fzf-file-widget-smart() {
     local file="${LBUFFER# }"
     BUFFER=""
     print -z "${EDITOR:-vim} ${(q)file}"
+    zle accept-line
   fi
 }
 zle -N fzf-file-widget-smart
