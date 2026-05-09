@@ -59,7 +59,7 @@ _fzf_flag_f='/tmp/fzf_hidden_files'
 _fzf_flag_d='/tmp/fzf_hidden_dirs'
 rm -f "$_fzf_flag_f" "$_fzf_flag_d"
 
-# ── CTRL+F → fichiers | CTRL+H : cachés ON | ALT+MAJ+H : cachés OFF ───────────
+# ── CTRL+F → fichiers | CTRL+H : Toggle hidden ───────────
 export FZF_CTRL_T_OPTS="
   --preview '$_fzf_preview_file'
   --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF'
@@ -73,6 +73,7 @@ export FZF_CTRL_T_OPTS="
     fi'
 "
 
+# ── CTRL+T → dossier | CTRL+H : Toggle hidden ───────────
 export FZF_ALT_C_OPTS="
   --preview '$_fzf_preview_dir'
   --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF'
