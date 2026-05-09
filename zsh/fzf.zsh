@@ -50,9 +50,9 @@ export FZF_DEFAULT_OPTS="
   --bind='ctrl-/:toggle-preview'
   --bind='ctrl-u:preview-half-page-up'
   --bind='ctrl-d:preview-half-page-down'
-  --color=bg:-1,bg+:-1,fg:-1,fg+:-1,border:-1
+  --color=bg:-1,bg+:-1,fg:-1,fg+:7,border:-1
   --color=hl:4,hl+:4,info:3,prompt:4
-  --color=pointer:1,marker:2,spinner:3,header:1
+  --color=pointer:1,marker:2,spinner:3,header:242
 "
 
 # ── CTRL+F → fichiers | ALT+H : cachés ON | ALT+MAJ+H : cachés OFF ───────────
