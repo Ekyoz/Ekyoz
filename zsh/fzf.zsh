@@ -61,9 +61,9 @@ export FZF_CTRL_T_OPTS="
   --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
   --bind='alt-h:transform:
     if [[ \$FZF_PROMPT == *\"[+H]\"* ]]; then
-      echo \"reload($_fzf_files)+change-prompt(fichiers ❯ )\"
+      echo \"reload($_fzf_files)+change-prompt([-H] ❯ )\"
     else
-      echo \"reload($_fzf_files_h)+change-prompt(fichiers [+H] ❯ )\"
+      echo \"reload($_fzf_files_h)+change-prompt([+H] ❯ )\"
     fi'
 "
 
@@ -73,9 +73,9 @@ export FZF_ALT_C_OPTS="
   --header='CTRL+/ : preview  |  ALT+H : toggle hidden'
   --bind='alt-h:transform:
     if [[ \$FZF_PROMPT == *\"[+H]\"* ]]; then
-      echo \"reload($_fzf_dirs)+change-prompt(dossiers ❯ )\"
+      echo \"reload($_fzf_dirs)+change-prompt([-H] ❯ )\"
     else
-      echo \"reload($_fzf_dirs_h)+change-prompt(dossiers [+H] ❯ )\"
+      echo \"reload($_fzf_dirs_h)+change-prompt([+H] ❯ )\"
     fi'
 "
 
@@ -86,8 +86,23 @@ export FZF_CTRL_R_OPTS="
   --header='CTRL+/ : toggle preview'
 "
 
+# ── Widget CTRL+F custom ──────────────────────────────────────────────────────
+fzf-file-widget-smart() {
+  local file
+  file="$(eval "$FZF_CTRL_T_COMMAND" | fzf ${=FZF_CTRL_T_OPTS})"
+  [ -z "$file" ] && zle redisplay && return
+
+  if [ -z "$BUFFER" ]; then
+    ${EDITOR:-vim} "$file"
+    zle reset-prompt
+  else
+    LBUFFER+="$file"
+  fi
+}
+zle -N fzf-file-widget-smart
+
 # ── Remapping ─────────────────────────────────────────────────────────────────
-bindkey '^F' fzf-file-widget
+bindkey '^F' fzf-file-widget-smart
 bindkey '^T' fzf-cd-widget
 bindkey -r '^[c' 2>/dev/null
 
