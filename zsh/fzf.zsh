@@ -58,30 +58,30 @@ export FZF_DEFAULT_OPTS="
 _fzf_flag_f='/tmp/fzf_hidden_files'
 _fzf_flag_d='/tmp/fzf_hidden_dirs'
 
-# ── CTRL+F → fichiers | ALT+H : cachés ON | ALT+MAJ+H : cachés OFF ───────────
+# ── CTRL+F → fichiers | CTRL+H : cachés ON | ALT+MAJ+H : cachés OFF ───────────
 export FZF_CTRL_T_OPTS="
   --preview '$_fzf_preview_file'
-  --header='CTRL+/ : preview  |  ALT+H : toggle hidden  |  hidden: OFF'
-  --bind='alt-h:transform:
+  --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF'
+  --bind='ctrl-h:transform:
     if [ -f $_fzf_flag_f ]; then
       rm -f $_fzf_flag_f
-      echo \"reload($_fzf_files)+change-header(CTRL+/ : preview  |  ALT+H : toggle hidden  |  hidden: OFF)\"
+      echo \"reload($_fzf_files)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF)\"
     else
       touch $_fzf_flag_f
-      echo \"reload($_fzf_files_h)+change-header(CTRL+/ : preview  |  ALT+H : toggle hidden  |  hidden: ON)\"
+      echo \"reload($_fzf_files_h)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: ON)\"
     fi'
 "
 
 export FZF_ALT_C_OPTS="
   --preview '$_fzf_preview_dir'
-  --header='CTRL+/ : preview  |  ALT+H : toggle hidden  |  hidden: OFF'
+  --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF'
   --bind='alt-h:transform:
     if [ -f $_fzf_flag_d ]; then
       rm -f $_fzf_flag_d
-      echo \"reload($_fzf_dirs)+change-header(CTRL+/ : preview  |  ALT+H : toggle hidden  |  hidden: OFF)\"
+      echo \"reload($_fzf_dirs)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF)\"
     else
       touch $_fzf_flag_d
-      echo \"reload($_fzf_dirs_h)+change-header(CTRL+/ : preview  |  ALT+H : toggle hidden  |  hidden: ON)\"
+      echo \"reload($_fzf_dirs_h)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: ON)\"
     fi'
 "
 
