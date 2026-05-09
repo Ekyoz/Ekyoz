@@ -62,28 +62,28 @@ rm -f "$_fzf_flag_f" "$_fzf_flag_d"
 # ── CTRL+F → fichiers | CTRL+H : Toggle hidden ───────────
 export FZF_CTRL_T_OPTS="
   --preview '$_fzf_preview_file'
-  --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF'
+  --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  HIDDEN: OFF'
   --bind='ctrl-h:transform:
     if [ -f $_fzf_flag_f ]; then
       rm -f $_fzf_flag_f
-      echo \"reload($_fzf_files)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF)\"
+      echo \"reload($_fzf_files)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  HIDDEN: OFF)\"
     else
       touch $_fzf_flag_f
-      echo \"reload($_fzf_files_h)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: ON)\"
+      echo \"reload($_fzf_files_h)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  HIDDEN: ON)\"
     fi'
 "
 
-# ── CTRL+T → dossier | CTRL+H : Toggle hidden ───────────
+# ── CTRL+T → dossier | CTRL+H : Toggle HIDDEN ───────────
 export FZF_ALT_C_OPTS="
   --preview '$_fzf_preview_dir'
-  --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF'
+  --header='CTRL+/ : preview  |  CTRL+H : toggle hidden  |  HIDDEN: OFF'
   --bind='ctrl-h:transform:
     if [ -f $_fzf_flag_d ]; then
       rm -f $_fzf_flag_d
-      echo \"reload($_fzf_dirs)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: OFF)\"
+      echo \"reload($_fzf_dirs)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  HIDDEN: OFF)\"
     else
       touch $_fzf_flag_d
-      echo \"reload($_fzf_dirs_h)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  hidden: ON)\"
+      echo \"reload($_fzf_dirs_h)+change-header(CTRL+/ : preview  |  CTRL+H : toggle hidden  |  HIDDEN: ON)\"
     fi'
 "
 
