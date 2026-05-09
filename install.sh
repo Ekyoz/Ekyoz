@@ -198,4 +198,4 @@ fi
 echo -e "\n${GREEN}════════════════════════════════════${NC}"
 echo -e "${GREEN}  ✅ Setup terminé !${NC}"
 echo -e "${GREEN}════════════════════════════════════${NC}"
-echo -e "  Lance : ${YELLOW}exec zsh${NC}"
+echo -e "  Lance : ${YELLOW}reload${NC} ou ${YELLOW}exec zsh${NC}"
