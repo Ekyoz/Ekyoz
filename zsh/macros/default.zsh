@@ -183,6 +183,22 @@ wipef() {
   : > "$1"
 }
 
+hashpwd() {
+  emulate -L zsh
+  zmodload zsh/zcrypto > /dev/null 2>&1 || true
+  print -n "Mot de passe à hasher: "
+  read -s password
+  print ""
+  if [[ -z "$password" ]]; then
+    print "Aucun mot de passe saisi." >&2
+    return 1
+  fi
+  python3 -c "import bcrypt; print(bcrypt.hashpw(b'''$password''', bcrypt.gensalt()).decode())"
+}
+
+# ── ZSH UTILES ──────────────────────────────────────────────────────────────
+
+
 # Supprimer toutes les sauvegardes créées par l'installateur
 # usage: omz-clean-backups
 zsh-clean-backups() {
