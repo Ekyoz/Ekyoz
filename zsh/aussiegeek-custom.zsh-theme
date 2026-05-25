@@ -3,7 +3,7 @@ HOST_SHORT="${HOST_VALUE%%.*}"
 HOST_COLOR="red"
 case "${HOST_SHORT}" in
   Coxyz)
-    HOST_COLOR="green"
+    HOST_COLOR="yellow"
     ;;
   Aixyz)
     HOST_COLOR="cyan"
