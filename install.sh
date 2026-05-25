@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # =============================================================================
 # install.sh — Configuration zsh portable (Linux / macOS, sans sudo)
+# Sert aussi d'updater : seules les actions réellement effectuées sont affichées
+# (EKYOZ_VERBOSE=true pour voir aussi les "déjà à jour / déjà installé").
 # Usage : curl -fsSL https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/install.sh | bash
 # =============================================================================
 set -euo pipefail
@@ -14,12 +16,26 @@ CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ekyoz-zsh"
 # une mise à jour pendant que l'installeur tourne.
 export EKYOZ_DISABLE_AUTO_UPDATE=true
 
-# ── Couleurs ──────────────────────────────────────────────────────────────────
+# ── Affichage ─────────────────────────────────────────────────────────────────
+# On ne montre que ce qui est RÉELLEMENT fait :
+#   - step() diffère l'en-tête de section ; il n'est imprimé (_flush_step) que si
+#     une action (info/warn/error) suit — les sections sans action disparaissent ;
+#   - skip() = "déjà fait / à jour", silencieux sauf si EKYOZ_VERBOSE=true.
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
-info()  { echo -e "${GREEN}[✔]${NC} $1"; }
-warn()  { echo -e "${YELLOW}[!]${NC} $1"; }
-error() { echo -e "${RED}[✘]${NC} $1"; exit 1; }
-step()  { echo -e "\n${BLUE}──────────────────────────────${NC}\n${BLUE}$1${NC}"; }
+VERBOSE="${EKYOZ_VERBOSE:-false}"
+_pending_step=""
+_did_something=false
+
+_flush_step() {
+  [ -n "$_pending_step" ] || return 0
+  echo -e "\n${BLUE}──────────────────────────────${NC}\n${BLUE}$_pending_step${NC}"
+  _pending_step=""
+}
+step()  { _pending_step="$1"; }
+info()  { _flush_step; _did_something=true; echo -e "${GREEN}[✔]${NC} $1"; }
+warn()  { _flush_step; echo -e "${YELLOW}[!]${NC} $1"; }
+error() { _flush_step; echo -e "${RED}[✘]${NC} $1"; exit 1; }
+skip()  { [ "$VERBOSE" = "true" ] && { _flush_step; echo -e "${YELLOW}[=]${NC} $1"; }; return 0; }
 
 _has_sudo() {
   groups | tr ' ' '\n' | grep -qE '^(sudo|wheel|admin)$'
@@ -32,19 +48,19 @@ case "$OS" in
   Darwin*)  PLATFORM="macos" ;;
   *)        error "OS non supporté : $OS" ;;
 esac
-info "Plateforme détectée : $PLATFORM"
+skip "Plateforme détectée : $PLATFORM"
 
 # ── Vérification zsh ──────────────────────────────────────────────────────────
 step "Vérification de zsh"
 if ! command -v zsh &>/dev/null; then
   error "zsh n'est pas installé.\n  → Linux : sudo apt install zsh\n  → macOS : brew install zsh"
 fi
-info "zsh $(zsh --version | awk '{print $2}') trouvé"
+skip "zsh $(zsh --version | awk '{print $2}') trouvé"
 
 # ── Oh My Zsh ─────────────────────────────────────────────────────────────────
 step "Oh My Zsh"
 if [ -d "$HOME/.oh-my-zsh" ]; then
-  warn "Oh My Zsh déjà installé — skip"
+  skip "Oh My Zsh déjà installé"
 else
   info "Installation silencieuse de Oh My Zsh..."
   if curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | \
@@ -63,7 +79,7 @@ step "Plugins externes"
 clone_plugin() {
   local name="$1" url="$2" dest="$ZSH_CUSTOM/plugins/$1"
   if [ -d "$dest" ]; then
-    warn "$name déjà présent — skip"
+    skip "$name déjà présent"
   else
     info "Clonage de $name..."
     git clone --depth=1 -q "$url" "$dest"
@@ -76,7 +92,7 @@ clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-
 # ── fzf ───────────────────────────────────────────────────────────────────────
 step "fzf"
 if [ -d "$HOME/.fzf" ]; then
-  warn "fzf déjà installé — skip"
+  skip "fzf déjà installé"
 else
   info "Installation de fzf..."
   git clone --depth=1 -q https://github.com/junegunn/fzf.git "$HOME/.fzf"
@@ -88,7 +104,7 @@ fi
 # Nom du binaire : `fd` (brew/cargo) ou `fdfind` (apt Debian/Ubuntu).
 step "fd (find amélioré)"
 if command -v fd &>/dev/null || command -v fdfind &>/dev/null; then
-  warn "fd déjà installé — skip"
+  skip "fd déjà installé"
 elif [ "$PLATFORM" = "macos" ] && command -v brew &>/dev/null; then
   brew install fd >/dev/null 2>&1 && info "fd installé (brew)" || warn "Échec installation fd"
 elif [ "$PLATFORM" = "linux" ] && _has_sudo && command -v apt-get &>/dev/null; then
@@ -122,7 +138,7 @@ install_eza_prebuilt() {
 
 step "eza (ls amélioré)"
 if command -v eza &>/dev/null; then
-  warn "eza déjà installé — skip"
+  skip "eza déjà installé"
 else
   case "$PLATFORM" in
     macos)
@@ -159,11 +175,11 @@ download() {
   if curl -fsSL "$src" -o "$tmp_file"; then
     if [ -f "$dest" ] && cmp -s "$dest" "$tmp_file"; then
       rm -f "$tmp_file"
-      info "$(basename "$dest") déjà à jour"
+      skip "$(basename "$dest") déjà à jour"
       return 0
     fi
     mv "$tmp_file" "$dest"
-    info "$(basename "$dest") téléchargé"
+    info "$(basename "$dest") mis à jour"
     return 0
   fi
 
@@ -174,7 +190,7 @@ download() {
 download_if_missing() {
   local src="$1" dest="$2" label="${3:-$(basename "$dest")}"
   if [ -f "$dest" ]; then
-    info "$label déjà présent — conservé"
+    skip "$label déjà présent — conservé"
     return 0
   fi
   download "$src" "$dest"
@@ -203,7 +219,7 @@ zsh_editor_check_runner="export ZSH_CUSTOM='$ZSH_CUSTOM'; [ -f '$MACROS_DEFAULT_
 
 current_editor="$(zsh -ic "$zsh_editor_check_runner" 2>/dev/null | tail -n 1)"
 if [ -n "$current_editor" ] && command -v "$current_editor" >/dev/null 2>&1; then
-  info "Éditeur déjà configuré : $current_editor — skip"
+  skip "Éditeur déjà configuré : $current_editor"
 elif zsh -ic "$zsh_editor_runner"; then
   info "Configuration de l'éditeur effectuée via zsh-editor"
 else
@@ -219,10 +235,16 @@ mkdir -p "$CACHE_DIR"
 REMOTE_SHA="$(curl -fsSL --max-time 5 -H 'Accept: application/vnd.github.sha' \
   "https://api.github.com/repos/$REPO/commits/main" 2>/dev/null || true)"
 if [ -n "$REMOTE_SHA" ]; then
+  _old_sha=""
+  [ -f "$CACHE_DIR/version" ] && _old_sha="$(<"$CACHE_DIR/version")"
   printf '%s\n' "$REMOTE_SHA" > "$CACHE_DIR/version"
   date +%s > "$CACHE_DIR/last_check"
   rm -f "$CACHE_DIR/update_available"
-  info "Version installée : ${REMOTE_SHA:0:7}"
+  if [ "$_old_sha" = "$REMOTE_SHA" ]; then
+    skip "Version déjà à jour : ${REMOTE_SHA:0:7}"
+  else
+    info "Version installée : ${REMOTE_SHA:0:7}"
+  fi
 else
   warn "Version distante indisponible — l'auto-update se calera plus tard"
 fi
@@ -233,11 +255,16 @@ if [ "$(basename "$SHELL")" != "zsh" ]; then
   warn "Shell actuel : $SHELL"
   warn "Pour passer à zsh : chsh -s $(command -v zsh)"
 else
-  info "zsh est déjà ton shell par défaut"
+  skip "zsh est déjà ton shell par défaut"
 fi
 
 # ── Fin ───────────────────────────────────────────────────────────────────────
 echo -e "\n${GREEN}════════════════════════════════════${NC}"
-echo -e "${GREEN}  ✅ Setup terminé !${NC}"
-echo -e "${GREEN}════════════════════════════════════${NC}"
-echo -e "  Lance : ${YELLOW}reload${NC} ou ${YELLOW}exec zsh${NC}"
+if [ "$_did_something" = "true" ]; then
+  echo -e "${GREEN}  ✅ Terminé !${NC}"
+  echo -e "${GREEN}════════════════════════════════════${NC}"
+  echo -e "  Lance : ${YELLOW}reload${NC} ou ${YELLOW}exec zsh${NC}"
+else
+  echo -e "${GREEN}  ✅ Déjà à jour — rien à faire${NC}"
+  echo -e "${GREEN}════════════════════════════════════${NC}"
+fi
