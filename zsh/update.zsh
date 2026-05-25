@@ -25,9 +25,12 @@ _ekyoz_flag_file="$_ekyoz_cache_dir/update_available"  # SHA distant si MAJ disp
 zsh-update() {
   command -v curl >/dev/null 2>&1 || { print -u2 -- "curl introuvable"; return 1; }
   print -P "%F{blue}[ekyoz]%f Mise à jour en cours..."
-  if curl -fsSL "$EKYOZ_INSTALL_URL" | bash; then
+  # EKYOZ_FROM_UPDATER=1 : l'installeur ne fait pas le exec lui-même, on s'en
+  # charge ici pour recharger le shell courant (où la fonction tourne).
+  if curl -fsSL "$EKYOZ_INSTALL_URL" | EKYOZ_FROM_UPDATER=1 bash; then
     rm -f "$_ekyoz_flag_file"
-    print -P "%F{green}[ekyoz]%f Terminé. Lance %F{yellow}reload%f pour appliquer."
+    print -P "%F{green}[ekyoz]%f Mise à jour terminée — rechargement du shell..."
+    exec zsh
   else
     print -P "%F{red}[ekyoz]%f Échec de la mise à jour."
     return 1

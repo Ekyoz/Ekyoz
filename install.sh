@@ -260,11 +260,28 @@ fi
 
 # ── Fin ───────────────────────────────────────────────────────────────────────
 echo -e "\n${GREEN}════════════════════════════════════${NC}"
-if [ "$_did_something" = "true" ]; then
-  echo -e "${GREEN}  ✅ Terminé !${NC}"
-  echo -e "${GREEN}════════════════════════════════════${NC}"
-  echo -e "  Lance : ${YELLOW}reload${NC} ou ${YELLOW}exec zsh${NC}"
-else
+if [ "$_did_something" != "true" ]; then
   echo -e "${GREEN}  ✅ Déjà à jour — rien à faire${NC}"
   echo -e "${GREEN}════════════════════════════════════${NC}"
+  exit 0
 fi
+echo -e "${GREEN}  ✅ Terminé !${NC}"
+echo -e "${GREEN}════════════════════════════════════${NC}"
+
+# Appelé par l'updater (zsh-update) ? C'est lui qui rechargera le shell.
+[ "${EKYOZ_FROM_UPDATER:-0}" = "1" ] && exit 0
+
+# Recharge automatiquement le shell pour appliquer la nouvelle config.
+# (EKYOZ_NO_AUTO_EXEC=1 pour désactiver ce comportement)
+if [ "${EKYOZ_NO_AUTO_EXEC:-0}" != "1" ] && command -v zsh >/dev/null 2>&1; then
+  unset EKYOZ_DISABLE_AUTO_UPDATE EKYOZ_FROM_UPDATER   # ne pas fuiter dans le nouveau shell
+  echo -e "  ${BLUE}Rechargement du shell (exec zsh)...${NC}"
+  if [ -t 0 ]; then
+    exec zsh
+  elif [ -r /dev/tty ]; then
+    # Cas `curl | bash` : stdin est le pipe, on rebranche le terminal.
+    exec zsh </dev/tty
+  fi
+fi
+
+echo -e "  Lance : ${YELLOW}reload${NC} ou ${YELLOW}exec zsh${NC}"
