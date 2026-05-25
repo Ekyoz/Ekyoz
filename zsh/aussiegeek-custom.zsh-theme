@@ -1,8 +1,15 @@
 HOST_VALUE="${HOSTNAME:-${HOST:-}}"
-HOST_SEGMENT="%m"
-if [[ -n "${HOST_VALUE}" ]]; then
-  HOST_SEGMENT="%{${fg[red]}%}%m"
-fi
+HOST_SHORT="${HOST_VALUE%%.*}"
+HOST_COLOR="red"
+case "${HOST_SHORT}" in
+  Coxyz)
+    HOST_COLOR="green"
+    ;;
+  Aixyz)
+    HOST_COLOR="cyan"
+    ;;
+esac
+HOST_SEGMENT="%{${fg[$HOST_COLOR]}%}%m"
 
 if [[ -n "${SSH_CONNECTION:-}${SSH_CLIENT:-}${SSH_TTY:-}" ]]; then
   if [[ -n "${DISPLAY:-}" ]]; then
@@ -21,7 +28,7 @@ python_venv_prompt_info() {
 }
 
 PROMPT_TIME="%{${fg_bold[blue]}%}[%F{242}%T%f%{${fg_bold[blue]}%}]"
-PROMPT_USER_HOST="%{${fg_bold[blue]}%} [%{${fg[red]}%}%n@%m${SSH_SEGMENT}%{${fg_bold[blue]}%}]"
+PROMPT_USER_HOST="%{${fg_bold[blue]}%} [%{${fg[red]}%}%n@${HOST_SEGMENT}${SSH_SEGMENT}%{${fg_bold[blue]}%}]"
 PROMPT_PATH_INFO="%{${fg_bold[blue]}%} [%{${fg[red]}%}%~\$(git_prompt_info)%{${fg[yellow]}%}\$(ruby_prompt_info)%{${fg_bold[blue]}%}]"
 PROMPT_VENV=" \$(python_venv_prompt_info)"
 PROMPT_USER_HOST_PATH="${PROMPT_USER_HOST}${PROMPT_PATH_INFO}${PROMPT_VENV}%{$reset_color%}"
