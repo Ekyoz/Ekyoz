@@ -21,7 +21,7 @@ else
   SSH_SEGMENT=""
 fi
 
-USER_COLOR="grey"
+USER_COLOR="242"
 case "${USER}" in
   opxyz)
     USER_COLOR="red"
