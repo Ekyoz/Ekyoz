@@ -21,6 +21,13 @@ else
   SSH_SEGMENT=""
 fi
 
+USER_COLOR="242"
+case "${USER}" in
+  opxyz)
+    USER_COLOR="red"
+    ;;
+esac
+
 python_venv_prompt_info() {
   if [[ -n "${VIRTUAL_ENV:-}" ]]; then
     echo "%{${fg_bold[blue]}%}[%{${fg[white]}%}$(basename "${VIRTUAL_ENV}")%{${fg_bold[blue]}%}]"
@@ -28,7 +35,7 @@ python_venv_prompt_info() {
 }
 
 PROMPT_TIME="%{${fg_bold[blue]}%}[%F{242}%T%f%{${fg_bold[blue]}%}]"
-PROMPT_USER_HOST="%{${fg_bold[blue]}%} [%{${fg[red]}%}%n@${HOST_SEGMENT}${SSH_SEGMENT}%{${fg_bold[blue]}%}]"
+PROMPT_USER_HOST="%{${fg_bold[blue]}%} [%{${fg[$USER_COLOR]}%}%n%{${fg_bold[blue]}%}@${HOST_SEGMENT}${SSH_SEGMENT}%{${fg_bold[blue]}%}]"
 PROMPT_PATH_INFO="%{${fg_bold[blue]}%} [%{${fg[red]}%}%~\$(git_prompt_info)%{${fg[yellow]}%}\$(ruby_prompt_info)%{${fg_bold[blue]}%}]"
 PROMPT_VENV=" \$(python_venv_prompt_info)"
 PROMPT_USER_HOST_PATH="${PROMPT_USER_HOST}${PROMPT_PATH_INFO}${PROMPT_VENV}%{$reset_color%}"
