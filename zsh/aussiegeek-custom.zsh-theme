@@ -9,13 +9,13 @@ case "${HOST_SHORT}" in
     HOST_COLOR="cyan"
     ;;
 esac
-HOST_SEGMENT="%{${fg[$HOST_COLOR]}%}%m"
+HOST_SEGMENT="%F{$HOST_COLOR}%m"
 
 if [[ -n "${SSH_CONNECTION:-}${SSH_CLIENT:-}${SSH_TTY:-}" ]]; then
   if [[ -n "${DISPLAY:-}" ]]; then
-    SSH_SEGMENT=" %{${fg_bold[blue]}%}(%{${fg[22]}%}SSH🖥️%{${fg_bold[blue]}%})"
+    SSH_SEGMENT=" %{${fg_bold[blue]}%}(%F{22}SSH🖥️%{${fg_bold[blue]}%})"
   else
-    SSH_SEGMENT=" %{${fg_bold[blue]}%}(%{${fg[22]}%}SSH%{${fg_bold[blue]}%})"
+    SSH_SEGMENT=" %{${fg_bold[blue]}%}(%F{22}SSH%{${fg_bold[blue]}%})"
   fi
 else
   SSH_SEGMENT=""
@@ -26,6 +26,9 @@ case "${USER}" in
   opxyz)
     USER_COLOR="red"
     ;;
+  minecraft)
+    USER_COLOR="green"
+    ;;
 esac
 
 python_venv_prompt_info() {
@@ -35,7 +38,7 @@ python_venv_prompt_info() {
 }
 
 PROMPT_TIME="%{${fg_bold[blue]}%}[%F{242}%T%f%{${fg_bold[blue]}%}]"
-PROMPT_USER_HOST="%{${fg_bold[blue]}%} [%{${fg[$USER_COLOR]}%}%n%{${fg_bold[blue]}%}@${HOST_SEGMENT}${SSH_SEGMENT}%{${fg_bold[blue]}%}]"
+PROMPT_USER_HOST="%{${fg_bold[blue]}%} [%F{$USER_COLOR}%n%{${fg_bold[blue]}%}@${HOST_SEGMENT}${SSH_SEGMENT}%{${fg_bold[blue]}%}]"
 PROMPT_PATH_INFO="%{${fg_bold[blue]}%} [%{${fg[red]}%}%~\$(git_prompt_info)%{${fg[yellow]}%}\$(ruby_prompt_info)%{${fg_bold[blue]}%}]"
 PROMPT_VENV=" \$(python_venv_prompt_info)"
 PROMPT_USER_HOST_PATH="${PROMPT_USER_HOST}${PROMPT_PATH_INFO}${PROMPT_VENV}%{$reset_color%}"
