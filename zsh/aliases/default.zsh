@@ -15,3 +15,5 @@ alias e='$EDITOR'
 
 #------ UTILITIES ------#
 alias cls='clear'
+alias l='ls -lh'
+alias ll='ls -lha'
