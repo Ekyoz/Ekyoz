@@ -8,7 +8,6 @@
 set -euo pipefail
 
 REPO="Ekyoz/Ekyoz"
-RAW_BASE="https://raw.githubusercontent.com/$REPO/main/zsh"
 LOCAL_BIN="$HOME/.local/bin"
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ekyoz-zsh"
 
@@ -40,6 +39,20 @@ skip()  { [ "$VERBOSE" = "true" ] && { _flush_step; echo -e "${YELLOW}[=]${NC} $
 _has_sudo() {
   groups | tr ' ' '\n' | grep -qE '^(sudo|wheel|admin)$'
 }
+
+# ── Résolution du commit cible ────────────────────────────────────────────────
+# On épingle les téléchargements sur le SHA exact (pas sur `main`) : le CDN de
+# raw.githubusercontent peut servir un `main` périmé, ce qui désynchronise les
+# fichiers du SHA enregistré (l'auto-update se croit alors à jour à tort).
+# Un chemin /<sha>/ est immuable → fichiers toujours cohérents avec la version.
+REMOTE_SHA="$(curl -fsSL --max-time 8 -H 'Accept: application/vnd.github.sha' \
+  "https://api.github.com/repos/$REPO/commits/main" 2>/dev/null || true)"
+if [ -n "$REMOTE_SHA" ]; then
+  RAW_BASE="https://raw.githubusercontent.com/$REPO/$REMOTE_SHA/zsh"
+else
+  RAW_BASE="https://raw.githubusercontent.com/$REPO/main/zsh"
+  warn "SHA distant indisponible — repli sur la branche main"
+fi
 
 # ── Détection OS ──────────────────────────────────────────────────────────────
 OS="$(uname -s)"
@@ -230,10 +243,10 @@ else
 fi
 
 # ── Version & cache (pour l'auto-update) ──────────────────────────────────────
+# REMOTE_SHA a été résolu en début de script (et a servi à épingler RAW_BASE),
+# donc la version enregistrée correspond exactement aux fichiers téléchargés.
 step "Version & cache"
 mkdir -p "$CACHE_DIR"
-REMOTE_SHA="$(curl -fsSL --max-time 5 -H 'Accept: application/vnd.github.sha' \
-  "https://api.github.com/repos/$REPO/commits/main" 2>/dev/null || true)"
 if [ -n "$REMOTE_SHA" ]; then
   _old_sha=""
   [ -f "$CACHE_DIR/version" ] && _old_sha="$(<"$CACHE_DIR/version")"
