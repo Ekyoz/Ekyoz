@@ -3,9 +3,16 @@
 # install.sh — Configuration zsh portable (Linux / macOS, sans sudo)
 # Usage : curl -fsSL https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/install.sh | bash
 # =============================================================================
-set -e
+set -euo pipefail
 
-RAW_BASE="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/zsh"
+REPO="Ekyoz/Ekyoz"
+RAW_BASE="https://raw.githubusercontent.com/$REPO/main/zsh"
+LOCAL_BIN="$HOME/.local/bin"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ekyoz-zsh"
+
+# Empêche update.zsh (sourcé par les `zsh -ic` ci-dessous) de proposer/déclencher
+# une mise à jour pendant que l'installeur tourne.
+export EKYOZ_DISABLE_AUTO_UPDATE=true
 
 # ── Couleurs ──────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
@@ -13,6 +20,10 @@ info()  { echo -e "${GREEN}[✔]${NC} $1"; }
 warn()  { echo -e "${YELLOW}[!]${NC} $1"; }
 error() { echo -e "${RED}[✘]${NC} $1"; exit 1; }
 step()  { echo -e "\n${BLUE}──────────────────────────────${NC}\n${BLUE}$1${NC}"; }
+
+_has_sudo() {
+  groups | tr ' ' '\n' | grep -qE '^(sudo|wheel|admin)$'
+}
 
 # ── Détection OS ──────────────────────────────────────────────────────────────
 OS="$(uname -s)"
@@ -45,7 +56,6 @@ else
 fi
 
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-BACKUP_DIR="$HOME/.oh-my-zsh/backups"
 
 # ── Plugins externes ──────────────────────────────────────────────────────────
 step "Plugins externes"
@@ -60,10 +70,11 @@ clone_plugin() {
   fi
 }
 
-clone_plugin "zsh-autosuggestions"   "https://github.com/zsh-users/zsh-autosuggestions"
+clone_plugin "zsh-autosuggestions"     "https://github.com/zsh-users/zsh-autosuggestions"
 clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
 
 # ── fzf ───────────────────────────────────────────────────────────────────────
+step "fzf"
 if [ -d "$HOME/.fzf" ]; then
   warn "fzf déjà installé — skip"
 else
@@ -73,57 +84,74 @@ else
   info "fzf installé"
 fi
 
-# ── fd ────────────────────────────────────────────────────────────────────────
-_has_sudo() {
-  groups | tr ' ' '\n' | grep -qE '^(sudo|wheel|admin)$'
+# ── fd (find amélioré) ────────────────────────────────────────────────────────
+# Nom du binaire : `fd` (brew/cargo) ou `fdfind` (apt Debian/Ubuntu).
+step "fd (find amélioré)"
+if command -v fd &>/dev/null || command -v fdfind &>/dev/null; then
+  warn "fd déjà installé — skip"
+elif [ "$PLATFORM" = "macos" ] && command -v brew &>/dev/null; then
+  brew install fd >/dev/null 2>&1 && info "fd installé (brew)" || warn "Échec installation fd"
+elif [ "$PLATFORM" = "linux" ] && _has_sudo && command -v apt-get &>/dev/null; then
+  sudo apt-get install -y fd-find >/dev/null 2>&1 && info "fd installé (apt)" || warn "Échec installation fd"
+else
+  warn "fd non installé (pas de gestionnaire de paquets dispo) — skip"
+fi
+
+# ── eza (ls amélioré) ─────────────────────────────────────────────────────────
+install_eza_prebuilt() {
+  # Télécharge un binaire eza pré-compilé dans ~/.local/bin (sans sudo).
+  local arch target url tmp
+  arch="$(uname -m)"
+  case "$arch" in
+    x86_64|amd64)  target="x86_64-unknown-linux-musl" ;;
+    aarch64|arm64) target="aarch64-unknown-linux-gnu" ;;
+    *) warn "Architecture non gérée pour eza pré-compilé : $arch"; return 1 ;;
+  esac
+  url="https://github.com/eza-community/eza/releases/latest/download/eza_${target}.tar.gz"
+  mkdir -p "$LOCAL_BIN"
+  tmp="$(mktemp -d)" || return 1
+  if curl -fsSL "$url" -o "$tmp/eza.tar.gz" && tar -xzf "$tmp/eza.tar.gz" -C "$tmp" && [ -f "$tmp/eza" ]; then
+    mv "$tmp/eza" "$LOCAL_BIN/eza"
+    chmod +x "$LOCAL_BIN/eza"
+    rm -rf "$tmp"
+    return 0
+  fi
+  rm -rf "$tmp"
+  return 1
 }
 
-step "fd (find amélioré)"
-if command -v fdfind &>/dev/null; then
-  warn "fd déjà installé — skip"
-elif _has_sudo; then
-  info "Installation de fd..."
-  if [ "$PLATFORM" = "macos" ]; then
-    brew install fd >/dev/null 2>&1 && info "fd installé" || warn "Échec installation fd"
-  else
-    sudo apt-get install -y fd-find >/dev/null 2>&1 && info "fd installé" || warn "Échec installation fd"
-  fi
+step "eza (ls amélioré)"
+if command -v eza &>/dev/null; then
+  warn "eza déjà installé — skip"
 else
-  warn "fd non installé et pas de droits sudo — skip"
+  case "$PLATFORM" in
+    macos)
+      if command -v brew &>/dev/null; then
+        brew install eza >/dev/null 2>&1 && info "eza installé (brew)" || warn "Échec installation eza via brew"
+      else
+        warn "Homebrew absent — installe eza manuellement : brew install eza"
+      fi
+      ;;
+    linux)
+      if _has_sudo && command -v apt-get &>/dev/null && apt-cache show eza &>/dev/null; then
+        sudo apt-get install -y eza >/dev/null 2>&1 && info "eza installé (apt)" || warn "Échec installation eza via apt"
+      else
+        info "Installation d'eza (binaire pré-compilé, sans sudo)..."
+        if install_eza_prebuilt; then
+          info "eza installé dans $LOCAL_BIN"
+        else
+          warn "Échec installation eza — les alias retomberont sur ls"
+        fi
+      fi
+      ;;
+  esac
 fi
 
 # ── Téléchargement des fichiers zsh ───────────────────────────────────────────
 step "Téléchargement des fichiers zsh"
 
-ask_backup_if_different() {
-  local dest="$1" answer="" timestamp="" rel_path="" backup_name=""
-  [ -f "$dest" ] || return 0
-
-  warn "$(basename "$dest") diffère de la version distante"
-  if [ -r /dev/tty ]; then
-    read -r -p "Créer une sauvegarde avant remplacement ? [y/N] " answer < /dev/tty
-  else
-    warn "Aucun terminal interactif détecté, pas de sauvegarde demandée"
-    return 0
-  fi
-
-  case "$answer" in
-    [yY]|[yY][eE][sS]|[oO]|[oO][uU][iI])
-      timestamp="$(date +%Y%m%d%H%M%S)"
-      mkdir -p "$BACKUP_DIR"
-      rel_path="${dest#"$HOME/"}"
-      backup_name="${rel_path//\//__}.bak.$timestamp"
-      cp "$dest" "$BACKUP_DIR/$backup_name"
-      info "Sauvegarde créée : $BACKUP_DIR/$backup_name"
-      ;;
-    *)
-      info "Pas de sauvegarde, remplacement direct"
-      ;;
-  esac
-}
-
 download() {
-  local src="$1" dest="$2" optional="${3:-false}" with_backup="${4:-true}" tmp_file=""
+  local src="$1" dest="$2" tmp_file=""
 
   mkdir -p "$(dirname "$dest")"
   tmp_file="$(mktemp)" || error "Impossible de créer un fichier temporaire"
@@ -134,26 +162,13 @@ download() {
       info "$(basename "$dest") déjà à jour"
       return 0
     fi
-
-    [ "$with_backup" = "true" ] && ask_backup_if_different "$dest"
     mv "$tmp_file" "$dest"
     info "$(basename "$dest") téléchargé"
     return 0
   fi
 
   rm -f "$tmp_file"
-
-  if [ "$optional" = "true" ]; then
-    warn "$(basename "$dest") introuvable dans le dépôt distant"
-    return 1
-  fi
-
   error "Impossible de télécharger : $src"
-}
-
-download_without_backup() {
-  local src="$1" dest="$2"
-  download "$src" "$dest" "false" "false"
 }
 
 download_if_missing() {
@@ -162,37 +177,21 @@ download_if_missing() {
     info "$label déjà présent — conservé"
     return 0
   fi
-  download "$src" "$dest" "false" "false"
+  download "$src" "$dest"
 }
 
-download_without_backup "$RAW_BASE/.zshrc" "$HOME/.zshrc"
-download_without_backup "$RAW_BASE/aliases/default.zsh" "$ZSH_CUSTOM/aliases/default.zsh"
-download_without_backup "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
-download_without_backup "$RAW_BASE/macros/default.zsh" "$ZSH_CUSTOM/macros/default.zsh"
-download_without_backup "$RAW_BASE/fzf.zsh" "$ZSH_CUSTOM/fzf.zsh"
+# Fichiers partagés : toujours synchronisés avec le dépôt
+download "$RAW_BASE/.zshrc"                      "$HOME/.zshrc"
+download "$RAW_BASE/aliases/default.zsh"         "$ZSH_CUSTOM/aliases/default.zsh"
+download "$RAW_BASE/macros/default.zsh"          "$ZSH_CUSTOM/macros/default.zsh"
+download "$RAW_BASE/fzf.zsh"                     "$ZSH_CUSTOM/fzf.zsh"
+download "$RAW_BASE/update.zsh"                  "$ZSH_CUSTOM/update.zsh"
+download "$RAW_BASE/aussiegeek-custom.zsh-theme" "$ZSH_CUSTOM/themes/aussiegeek-custom.zsh-theme"
 
+# Fichiers locaux : créés une fois puis jamais écrasés
 download_if_missing "$RAW_BASE/aliases/local.zsh" "$ZSH_CUSTOM/aliases/local.zsh" "aliases/local.zsh"
-download_if_missing "$RAW_BASE/macros/local.zsh" "$ZSH_CUSTOM/macros/local.zsh" "macros/local.zsh"
-download_if_missing "$RAW_BASE/export.zsh" "$ZSH_CUSTOM/export.zsh" "export.zsh"
-
-# ── Configuration zsh ──────────────────────────────────────────────────────────
-step "Configuration zsh"
-
-# Force format horaire 24h (évite AM/PM dans les prompts qui suivent LC_TIME)
-if grep -q '^export LC_TIME=' "$HOME/.zshrc"; then
-  _tmp_zshrc="$(mktemp)" || error "Impossible de créer un fichier temporaire"
-  if ! sed 's|^export LC_TIME=.*|export LC_TIME=fr_FR.UTF-8|' "$HOME/.zshrc" > "$_tmp_zshrc"; then
-    rm -f "$_tmp_zshrc"
-    error "Impossible de mettre à jour LC_TIME dans .zshrc"
-  fi
-  if ! mv "$_tmp_zshrc" "$HOME/.zshrc"; then
-    rm -f "$_tmp_zshrc"
-    error "Impossible de remplacer .zshrc"
-  fi
-else
-  printf '\n# Format horaire 24h\nexport LC_TIME=fr_FR.UTF-8\n' >> "$HOME/.zshrc"
-fi
-info "LC_TIME configuré en fr_FR.UTF-8 (format 24h)"
+download_if_missing "$RAW_BASE/macros/local.zsh"  "$ZSH_CUSTOM/macros/local.zsh"  "macros/local.zsh"
+download_if_missing "$RAW_BASE/export.zsh"        "$ZSH_CUSTOM/export.zsh"        "export.zsh"
 
 # ── Éditeur par défaut ────────────────────────────────────────────────────────
 step "Configuration éditeur"
@@ -212,6 +211,20 @@ else
   _tmp="$(grep -v '^export EDITOR=' "$EXPORT_ZSH" 2>/dev/null || true)"
   printf '%s\nexport EDITOR='"'"'%s'"'"'\n' "$_tmp" "vim" > "$EXPORT_ZSH"
   info "EDITOR='vim' enregistré dans $EXPORT_ZSH"
+fi
+
+# ── Version & cache (pour l'auto-update) ──────────────────────────────────────
+step "Version & cache"
+mkdir -p "$CACHE_DIR"
+REMOTE_SHA="$(curl -fsSL --max-time 5 -H 'Accept: application/vnd.github.sha' \
+  "https://api.github.com/repos/$REPO/commits/main" 2>/dev/null || true)"
+if [ -n "$REMOTE_SHA" ]; then
+  printf '%s\n' "$REMOTE_SHA" > "$CACHE_DIR/version"
+  date +%s > "$CACHE_DIR/last_check"
+  rm -f "$CACHE_DIR/update_available"
+  info "Version installée : ${REMOTE_SHA:0:7}"
+else
+  warn "Version distante indisponible — l'auto-update se calera plus tard"
 fi
 
 # ── Shell par défaut ──────────────────────────────────────────────────────────

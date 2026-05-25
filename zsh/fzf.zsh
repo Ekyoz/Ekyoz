@@ -6,11 +6,20 @@
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 # ── Commandes ─────────────────────────────────────────────────────────────────
-if command -v fdfind &>/dev/null; then
-  _fzf_files='fdfind --type f --follow --exclude .git'
-  _fzf_files_h='fdfind --type f --hidden --follow --exclude .git'
-  _fzf_dirs='fdfind --type d --follow --exclude .git'
-  _fzf_dirs_h='fdfind --type d --hidden --follow --exclude .git'
+# Binaire fd : `fd` (brew/cargo) ou `fdfind` (apt Debian/Ubuntu), sinon find.
+if command -v fd &>/dev/null; then
+  _fd_cmd='fd'
+elif command -v fdfind &>/dev/null; then
+  _fd_cmd='fdfind'
+else
+  _fd_cmd=''
+fi
+
+if [[ -n "$_fd_cmd" ]]; then
+  _fzf_files="$_fd_cmd --type f --follow --exclude .git"
+  _fzf_files_h="$_fd_cmd --type f --hidden --follow --exclude .git"
+  _fzf_dirs="$_fd_cmd --type d --follow --exclude .git"
+  _fzf_dirs_h="$_fd_cmd --type d --hidden --follow --exclude .git"
 else
   _fzf_files='find . -mindepth 1 -name ".*" -prune -o -type f -not -path "*/.git/*" -print'
   _fzf_files_h='find . -type f -not -path "*/.git/*"'
@@ -55,8 +64,9 @@ export FZF_DEFAULT_OPTS="
   --color=pointer:1,marker:2,spinner:3,header:242
 "
 
-_fzf_flag_f='/tmp/fzf_hidden_files'
-_fzf_flag_d='/tmp/fzf_hidden_dirs'
+# Fichiers d'état par utilisateur (évite les collisions de permissions en /tmp)
+_fzf_flag_f="${TMPDIR:-/tmp}/fzf_hidden_files_${UID}"
+_fzf_flag_d="${TMPDIR:-/tmp}/fzf_hidden_dirs_${UID}"
 rm -f "$_fzf_flag_f" "$_fzf_flag_d"
 
 # ── CTRL+F → fichiers | CTRL+H : Toggle hidden ───────────
@@ -114,4 +124,4 @@ bindkey '^T' fzf-cd-widget
 bindkey -r '^[c' 2>/dev/null
 
 unset _fzf_files _fzf_files_h _fzf_dirs _fzf_dirs_h
-unset _fzf_preview_file _fzf_preview_dir
+unset _fzf_preview_file _fzf_preview_dir _fd_cmd

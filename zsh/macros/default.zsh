@@ -185,22 +185,24 @@ wipef() {
 
 hashpwd() {
   emulate -L zsh
-  zmodload zsh/zcrypto > /dev/null 2>&1 || true
+  local password
   print -n "Mot de passe à hasher: "
-  read -s password
+  read -rs password
   print ""
   if [[ -z "$password" ]]; then
-    print "Aucun mot de passe saisi." >&2
+    print -u2 "Aucun mot de passe saisi."
     return 1
   fi
-  python3 -c "import bcrypt; print(bcrypt.hashpw(b'''$password''', bcrypt.gensalt()).decode())"
+  # Mot de passe passé via l'environnement (jamais interpolé dans le code Python)
+  _HASHPWD_INPUT="$password" python3 -c \
+    'import os, bcrypt; print(bcrypt.hashpw(os.environ["_HASHPWD_INPUT"].encode(), bcrypt.gensalt()).decode())'
 }
 
 # ── ZSH UTILES ──────────────────────────────────────────────────────────────
 
 
 # Supprimer toutes les sauvegardes créées par l'installateur
-# usage: omz-clean-backups
+# usage: zsh-clean-backups
 zsh-clean-backups() {
   local _backup_dir="$HOME/.oh-my-zsh/backups"
 
@@ -218,7 +220,7 @@ zsh-clean-backups() {
 }
 
 # Sauvegarder tous les réglages Oh My Zsh (focus sur les settings locaux)
-# usage: omz-backup-settings
+# usage: zsh-backup
 zsh-backup() {
   local _zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
   local _backup_root="$HOME/.oh-my-zsh/backups/settings"
@@ -260,7 +262,7 @@ zsh-backup() {
 }
 
 # Restaurer une sauvegarde des réglages Oh My Zsh
-# usage: omz-restore-settings [chemin_vers_archive]
+# usage: zsh-restore [chemin_vers_archive]
 zsh-restore() {
   local _backup_root="$HOME/.oh-my-zsh/backups/settings"
   local _archive="$1"
