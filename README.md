@@ -151,6 +151,13 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 </td>
 <td align="center" width="33%">
 
+### 🏠 [Coxyz](https://coxyz.fr)
+> Mon écosystème self-hosted : home server, Docker, automatisation, domotique, IA locale.
+<a href="https://coxyz.fr">
+  <img src="https://img.shields.io/badge/Découvrir-coxyz.fr-0e75b6?style=for-the-badge&logo=googlechrome&logoColor=white" />
+</a>
+<td align="center" width="33%">
+
 ### 🎛️ [SoundMapping](https://github.com/Coxyz/SoundMapping)
 > Logiciel pour gérer le son de chaque application sur Windows.
 <a href="https://github.com/Coxyz/SoundMapping">
@@ -158,13 +165,8 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 </a>
 
 </td>
-<td align="center" width="33%">
 
-### 📟 [MCSM](https://github.com/Mizu-cmd/MCSM)
-> Gestion et création de serveurs Minecraft via une interface intuitive.
-<a href="https://github.com/Mizu-cmd/MCSM">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=Mizu-cmd&repo=MCSM&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
-</a>
+</td>
 
 </td>
 </tr>
