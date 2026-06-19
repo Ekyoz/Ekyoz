@@ -18,7 +18,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 
 ## 📄 Mon parcours à 42
 🎓 Consulte mon **transcript officiel** :
-[➡️ Télécharger mon transcript (PDF)](./transcript.pdf)
+[➡️ Télécharger mon transcript (PDF)](./profile/transcript.pdf)
 
 ---
 
