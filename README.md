@@ -47,12 +47,6 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
   </a>
   <br><b>Python</b>
 </td>
-<td align="center" width="150">
-  <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="60" height="60" alt="JavaScript" />
-  </a>
-  <br><b>JavaScript</b>
-</td>
 </tr>
 </table>
 
@@ -70,6 +64,12 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" width="60" height="60" alt="C#" />
   </a>
   <br><b>C#</b>
+</td>
+<td align="center" width="150">
+  <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="60" height="60" alt="JavaScript" />
+  </a>
+  <br><b>JavaScript</b>
 </td>
 <td align="center" width="150">
   <a href="https://www.typescriptlang.org/">
