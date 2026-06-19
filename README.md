@@ -1,22 +1,24 @@
 <h1>👋 Salut, je suis Alexandre <img align="right" src="https://komarev.com/ghpvc/?username=ekyoz&label=Nombres%20de%20vues&color=0e75b6&style=for-the-badge" alt="ekyoz" /></h1>
 
-🎓 Étudiant à **42 Lyon**  
-💡 Passionné par le **développement logiciel**, l’**intelligence artificielle** et les **systèmes embarqués**.  
-🔧 Développeur axé sur la **qualité du code** et l’**apprentissage continu**.  
+🎓 Étudiant à **42 Lyon**, spécialisation systèmes embarqués
+💡 Passionné par le **développement logiciel**, l'**intelligence artificielle** et les **systèmes embarqués**.
+🔧 Développeur axé sur la **qualité du code** et l'**apprentissage continu**.
 
-## 🧠 Domaines d’intérêt
+## 🧠 Domaines d'intérêt
 - ⚙️ **Systèmes embarqués**
 - 🤖 **Intelligence Artificielle**
 - 🧩 **Architecture logicielle & optimisation**
+- 🔐 **Sécurité offensive** (CTF, reverse engineering, exploitation binaire)
+- 🏠 **Home Lab & domotique** (self-hosting, Home Assistant)
 
 ---
 
 ## 🎯 Objectif professionnel
-Continuer à progresser en **C++**, en **systèmes embarqués**, et à explorer l’**intelligence artificielle** appliquée.  
+Continuer à progresser en **C++**, en **systèmes embarqués**, et à explorer l'**intelligence artificielle** appliquée.
 Je cherche à construire des logiciels **robustes, performants et intelligents**.
 
 ## 📄 Mon parcours à 42
-🎓 Consulte mon **transcript officiel** :  
+🎓 Consulte mon **transcript officiel** :
 [➡️ Télécharger mon transcript (PDF)](./transcript.pdf)
 
 ---
@@ -24,7 +26,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 ## 💻 Langages
 
 <div align="center">
-  
+
 ### 🌟 Langages principaux
 <table>
 <tr>
@@ -117,6 +119,18 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
   </a>
   <br><b>JetBrains IDE</b>
 </td>
+<td align="center" width="150">
+  <a href="https://www.linux.org/">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="60" height="60" alt="Linux" />
+  </a>
+  <br><b>Linux</b>
+</td>
+<td align="center" width="150">
+  <a href="https://www.home-assistant.io/">
+    <img src="https://cdn.simpleicons.org/homeassistant/41BDF5" width="60" height="60" alt="Home Assistant" />
+  </a>
+  <br><b>Home Assistant</b>
+</td>
 </tr>
 </table>
 
@@ -128,7 +142,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 <table>
 <tr>
 <td align="center" width="33%">
-  
+
 ### 🕹️ [Transcendence](https://github.com/The-mallocers/Transcendence)
 > Jeu de pong multijoueur en temps réel (auth, chat, API).
 <a href="https://github.com/The-mallocers/Transcendence">
@@ -137,7 +151,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 
 </td>
 <td align="center" width="33%">
-  
+
 ### 🎛️ [Teqo_Tweaker](https://github.com/Ekyoz/TEQO-Tweaker)
 > Logiciel pour gérer le son de chaque application sur Windows.
 <a href="https://github.com/Ekyoz/TEQO-Tweaker">
@@ -146,7 +160,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 
 </td>
 <td align="center" width="33%">
-  
+
 ### 📟 [MCSM](https://github.com/Mizu-cmd/MCSM)
 > Gestion et création de serveurs Minecraft via une interface intuitive.
 <a href="https://github.com/Mizu-cmd/MCSM">
@@ -159,29 +173,19 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 
 </div>
 
-
 ## 📊 Statistiques GitHub
 <div align="center">
-  <a href="https://github.com/Ekyoz">
-    <img height="230em" src="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/profile-summary-card-output/github/0-profile-details.svg" />
-  </a>
-  <a href="https://github.com/Ekyoz">
-    <img height="200em" src="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/profile-summary-card-output/github/3-stats.svg" />
-  </a>
-  <a href="https://github.com/Ekyoz">
-    <img height="200em" src="https://raw.githubusercontent.com/Ekyoz/Ekyoz/main/profile-summary-card-output/github/1-repos-per-language.svg" />
-  </a>
+  <img height="200em" src="./profile/stats.svg" alt="Statistiques GitHub" />
+  <img height="200em" src="./profile/top-langs.svg" alt="Langages les plus utilisés" />
 </div>
 
 ## ⏱️ Statistiques de codage
 <div align="center">
-  <a href="https://wakatime.com/@Ekyoz">
-    <img src="https://github-readme-stats.vercel.app/api/wakatime?username=ekyoz&layout=compact" alt="Statistiques de codage WakaTime" />
-  </a>
+  <img src="./profile/wakatime.svg" alt="Statistiques de codage WakaTime" />
 </div>
 
 ## 📫 Contact
-📧 **Mon email** : [alexandre.tresallet@gmail.com](mailto:alexandre.tresallet@gmail.com)  
+📧 **Mon email** : [alexandre.tresallet@gmail.com](mailto:alexandre.tresallet@gmail.com)
 💼 **Mon LinkedIn** : [alexandre-tresallet](https://linkedin.com/in/alexandre-tresallet/)
 
-💡 *“La rigueur construit les fondations, la curiosité trace la voie.”*
+💡 *"La rigueur construit les fondations, la curiosité trace la voie."*
