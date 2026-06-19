@@ -151,10 +151,10 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 </td>
 <td align="center" width="33%">
 
-### 🎛️ [Teqo_Tweaker](https://github.com/Ekyoz/TEQO-Tweaker)
+### 🎛️ [SoundMapping](https://github.com/Coxyz/SoundMapping)
 > Logiciel pour gérer le son de chaque application sur Windows.
-<a href="https://github.com/Ekyoz/TEQO-Tweaker">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=Ekyoz&repo=TEQO-Tweaker&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
+<a href="https://github.com/Coxyz/SoundMapping">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=Coxyz&repo=SoundMapping&theme=default&bg_color=ffffff&title_color=000000&icon_color=000000" />
 </a>
 
 </td>
