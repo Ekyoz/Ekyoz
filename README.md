@@ -7,9 +7,8 @@
 ## 🧠 Domaines d'intérêt
 - ⚙️ **Systèmes embarqués**
 - 🤖 **Intelligence Artificielle**
-- 🧩 **Architecture logicielle & optimisation**
-- 🔐 **Sécurité offensive** (CTF, reverse engineering, exploitation binaire)
 - 🏠 **Home Lab & domotique** (self-hosting, Home Assistant)
+- 🧩 **Architecture logicielle & optimisation**
 
 ---
 
@@ -186,6 +185,7 @@ Je cherche à construire des logiciels **robustes, performants et intelligents**
 
 ## 📫 Contact
 📧 **Mon email** : [alexandre.tresallet@gmail.com](mailto:alexandre.tresallet@gmail.com)
+
 💼 **Mon LinkedIn** : [alexandre-tresallet](https://linkedin.com/in/alexandre-tresallet/)
 
 💡 *"La rigueur construit les fondations, la curiosité trace la voie."*
